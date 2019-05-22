@@ -43,7 +43,7 @@
             <div id="confidence-container">
               <div>
                 <p class="confidence-text">How confident are you of the selected answer?
-                  <br>Move the slider to denote a value and provide your explanation.</p>
+                  <br>Move the slider to denote a value <b>AND</b> provide your explanation.</p>
               </div>
 
               <div class="slidecontainer" style="width:510px;">
@@ -59,9 +59,8 @@
               </div>
             </div>
 
-            <br />
 
-            <div class="button">
+            <div class="button" style="margin-top:20px;">
               <input id="submit-button" style="display:none;" class="submit-button" type="submit" ng-click="(count == 0) ? submitAnswer() : update()" />
             </div>
           </div>
@@ -125,9 +124,8 @@
         </div>
         <div class="col-sm-6"></div>
       </div>
-      <div class="chatarea col-sm-6" id="chat-area">
+      <div class="chatarea col-sm-6" id="chat-area" style="display:none;">
         <div class="minimize">
-          <!-- <img onclick="alert()" src="../assets/minimize.png" width="25" height="21" style="float:right;border-left: grey solid 1px;"> -->
         </div>
         <div class="textarea" id="text-area">
           <div ng-repeat="line in history" ng-class="{'last-line':$last}">

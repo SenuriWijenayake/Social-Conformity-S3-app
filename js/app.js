@@ -63,36 +63,26 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.question = {};
   $scope.sliderChanged = false;
+  $scope.explaned = false;
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
-
-  //Chatbot related variables
-  $scope.history = [{
-    name: "QuizBot",
-    msg: "Hi, I am QuizBot and welcome to our quiz program! :) "
-  }];
-
-  $timeout(function() {
-
-    $scope.history.push({
-      name: "QuizBot",
-      msg: "I can help you answer the questions. First, let's start with an example question for training purposes. Type 'TRAIN' to start the training."
-    });
-  }, 1000);
 
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
+    if ($scope.explaned){
+      $("#submit-button").css("display", "block");
+    }
   });
 
   $('.explanation-box').change(function(){
     $scope.explaned = true;
-    $("#submit-button").css("display", "block");
+    if ($scope.sliderChanged){
+      $("#submit-button").css("display", "block");
+    }
   });
 
-  //Setting the question one
-  console.log($scope.currentQIndex);
-
+  //Setting question one
   $http({
     method: 'POST',
     url: api + '/question',
@@ -108,6 +98,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     } else {
       $("#image-container").css("display", "none");
     }
+
+    $("#question-area").css("display", "inline");
+    $("#qBox").css("border", "solid red");
 
   }, function(error) {
     console.log("Error occured when getting the first question");
