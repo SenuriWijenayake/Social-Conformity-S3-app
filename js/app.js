@@ -27,7 +27,7 @@ app.controller('HomeController', function($scope, $http, $window) {
   });
 
   $scope.submitDetails = function(user) {
-    if (user.mode && user.questionSet && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.mode == 'name' ? user.name : true)) {
+    if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
 
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
@@ -39,10 +39,11 @@ app.controller('HomeController', function($scope, $http, $window) {
         type: JSON,
       }).then(function(response) {
         $window.sessionStorage.setItem('userId', response.data.id);
-        $window.sessionStorage.setItem('mode', user.mode);
-        $window.sessionStorage.setItem('questionSet', user.questionSet);
+        $window.sessionStorage.setItem('cues', user.cues);
+        $window.sessionStorage.setItem('discussion', user.discussion);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
+
       }, function(error) {
         console.log("Error occured when submitting user details");
       });
@@ -56,8 +57,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.currentQIndex = 0;
 
   $scope.userId = $window.sessionStorage.getItem('userId');
-  $scope.mode = $window.sessionStorage.getItem('mode');
-  $scope.questionSet = $window.sessionStorage.getItem('questionSet');
+  $scope.cues = $window.sessionStorage.getItem('cues');
+  $scope.discussion = $window.sessionStorage.getItem('discussion');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
 
   $scope.question = {};
@@ -114,8 +115,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     method: 'POST',
     url: api + '/question',
     data: {
-      set: $scope.questionSet,
-      mode: $scope.mode,
       id: $scope.order[$scope.currentQIndex]
     },
     type: JSON,
@@ -146,8 +145,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.myAnswer = {};
   $scope.myAnswer.confidence = 50;
   $scope.myAnswer.userId = $scope.userId;
-  $scope.myAnswer.mode = $scope.mode;
-  $scope.myAnswer.questionSet = $scope.questionSet;
+  $scope.myAnswer.cues = $scope.cues;
+  $scope.myAnswer.discussion = $scope.discussion;
 
   //Show only when the answer is selected
   $scope.clicked = function() {
@@ -190,8 +189,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
-      $scope.myAnswer.mode = $scope.mode;
-      $scope.myAnswer.questionSet = $scope.questionSet;
+      $scope.myAnswer.cues = $scope.cues;
+      $scope.myAnswer.discussion = $scope.discussion;
 
       $http({
         method: 'POST',
@@ -201,9 +200,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }).then(function(response) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         $timeout(function() {
-          if ($scope.myAnswer.mode == "control") {
+          if ($scope.myAnswer.cues == "control") {
             $scope.createChart(response.data);
-          } else if ($scope.myAnswer.mode == "avatar") {
+          } else if ($scope.myAnswer.cues == "avatar") {
             $scope.avatarFeedback(response.data);
           } else {
             $scope.namesFeedback(response.data);
@@ -245,14 +244,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("border", "none");
       $("#change-section").css("display", "none");
 
-      if ($scope.myAnswer.mode == "control") {
+      if ($scope.myAnswer.cues == "control") {
         $timeout(function() {
           $scope.history.push({
             name: "QuizBot",
             msg: "The chart given above demonstrates how other participants attempted the same question. Each square represents one participant (out of a total 7) who selected the corresponding answer option."
           });
         }, 500);
-      } else if ($scope.myAnswer.mode == "avatar") {
+      } else if ($scope.myAnswer.cues == "avatar") {
         $timeout(function() {
           $scope.history.push({
             name: "QuizBot",
@@ -389,7 +388,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
-      $scope.myAnswer.questionSet = $scope.questionSet;
+      $scope.myAnswer.discussion = $scope.discussion;
 
       $http({
         method: 'POST',
@@ -446,7 +445,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     } else {
       $scope.userId = $window.sessionStorage.getItem('userId');
       var data = {
-        set: $scope.questionSet,
+        set: $scope.discussion,
         id: $scope.order[$scope.currentQIndex]
       };
       console.log($scope.currentQIndex);
