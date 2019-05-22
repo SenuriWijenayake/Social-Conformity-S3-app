@@ -82,30 +82,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
-    $("#submit-button").css("display", "block");
     $("#output").css("color", "green");
+  });
 
-    if ($scope.question.questionNumber < 0) {
-      if ($scope.count == 0) {
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "Now click on the 'Submit' button to submit your initial answer and see feedback from others who attempted the quiz."
-          });
-        }, 500);
-      } else {
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "Now click on the 'Submit' button to submit your final answer and move to the next question."
-          });
-        }, 500);
-      }
-    }
-
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
+  $('.explanation-box').change(function(){
+    $scope.explaned = true;
+    $("#submit-button").css("display", "block");
   });
 
   //Setting the question one
@@ -176,12 +158,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.submitAnswer = function() {
 
-    if ($scope.sliderChanged) {
+    if ($scope.sliderChanged && $scope.explaned) {
       //Remove the button
       $("#submit-button").css("display", "none");
       //Disbling the input
       $("input[type=radio]").attr('disabled', true);
       $("input[type=range]").attr('disabled', true);
+      $(".explanation-box").attr('disabled', true);
       //Loader activated
       $("#loader").css("display", "block");
       $("#loader-text").css("display", "block");
@@ -200,12 +183,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }).then(function(response) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         $timeout(function() {
-          if ($scope.myAnswer.cues == "control") {
+          if ($scope.myAnswer.cues != "Yes") {
             $scope.createChart(response.data);
-          } else if ($scope.myAnswer.cues == "avatar") {
-            $scope.avatarFeedback(response.data);
           } else {
-            $scope.namesFeedback(response.data);
+            $scope.avatarFeedback(response.data);
           }
           $scope.showSummary(response.data.description);
         }, 3000);

@@ -23,6 +23,7 @@
       <div class="col-sm-6" id="question-area" style="display:none;">
         <form class="form-styles">
           <div id="qBox" style="text-align: center; padding:15px;">
+
             <div class="row">
               <p class="question-text"> <span ng-if="question.questionNumber >= 0"> Q{{currentQIndex - 1}}. </span>{{question.questionText}}</p>
               <div id="image-container" style="margin-bottom: 15px;">
@@ -38,10 +39,11 @@
                 <label for="{{answer.id}}" class="radio-text">{{answer.answer}}</label>
               </div>
             </div>
+
             <div id="confidence-container">
               <div>
                 <p class="confidence-text">How confident are you of the selected answer?
-                  <br>Move the slider to denote a value.</p>
+                  <br>Move the slider to denote a value and provide your explanation.</p>
               </div>
 
               <div class="slidecontainer" style="width:510px;">
@@ -50,7 +52,13 @@
               <div class="outputcontainer">
                 <output id="output" for="rangeInput">Not Selected</output>
               </div>
+              <div class="explanation-container">
+                <textarea class="explanation-box" ng-model="myAnswer.explanation" placeholder="Why do you think this answer is the correct one? Enter your explanation here.." required>
+                    Enter your explanation here..
+                </textarea>
+              </div>
             </div>
+
             <br />
 
             <div class="button">
