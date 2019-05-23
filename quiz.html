@@ -74,7 +74,7 @@
       <div class="col-sm-6 chartdiv" id="chart-area">
         <div id="chart_div" style="display:none;margin-left: 3%;margin-top:3%;">
           <div style="font-weight:bold;margin-bottom:1%;">Results of the group to this question (your answer is highlighted)..</div>
-          <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 3)}">
+          <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box"> <img src ="./assets/icons/{{option.avatar}}" width="50"></div>
             <div class="col-sm-9 feedback-explanation-box">
               <div class="col-sm-12" style="padding: 3px;"><b>Answer : </b>{{option.answer}}</div>

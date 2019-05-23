@@ -200,17 +200,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }
   };
 
-  $scope.namesFeedback = function(data) {
-    $scope.feedback = data.answers;
-
-    $("#loader").css("display", "none");
-    $("#loader-text").css("display", "none");
-
-    $("#names_div").css("display", "block");
-    $("#change-section").css("display", "block");
-
-  };
-
   $scope.avatarFeedback = function(data) {
     $scope.feedback = data;
     $("#loader").css("display", "none");
