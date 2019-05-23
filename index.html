@@ -164,7 +164,7 @@
 
       <div id="index-instructions" class="col-sm-5 index-container" style="text-align:center;margin-left: 25px;display:none;">
         <div class="welcome-text">What do I have to do?</div>
-        <div>You will be taking part in this <b>multilple-choice quiz</b> with <b style="font-size:25px;">FOUR</b> other anonymous users.
+        <div>You will be taking part in this <b>multilple-choice quiz</b> with <b style="font-size:25px;">FOUR</b> other users.
           <br/> For each question follow the following steps.</div>
 
         <div class="row instruction">
@@ -177,14 +177,24 @@
           <div class="col-sm-10 instruction-text">See how other participants answered the same question.</div>
         </div>
 
-        <div class="row instruction">
+        <div class="row instruction" ng-show="user.discussion == 'Yes'">
+          <div class="col-sm-2"><img src="./assets/3.svg" width = "50"></div>
+          <div class="col-sm-10 instruction-text">Discuss answers and explanations with others.</div>
+        </div>
+
+        <div class="row instruction" ng-show="user.discussion == 'No'">
           <div class="col-sm-2"><img src="./assets/3.svg" width = "50"></div>
           <div class="col-sm-10 instruction-text">Update your answer, confidence or explanation if needed.</div>
         </div>
 
-        <div class="row instruction">
+        <div class="row instruction" ng-show="user.discussion == 'No'">
           <div class="col-sm-2"><img src="./assets/4.png" width = "50"></div>
           <div class="col-sm-10 instruction-text">Submit your final answer.</div>
+        </div>
+
+        <div class="row instruction" ng-show="user.discussion == 'Yes'">
+          <div class="col-sm-2"><img src="./assets/4.png" width = "50"></div>
+          <div class="col-sm-10 instruction-text">Update your answer, confidence or explanation if needed and submit final answer.</div>
         </div>
 
         <div class="row" id="connection-pending" style="display:none;">
@@ -197,9 +207,13 @@
         </div>
 
         <div class="row" id="connection-success" style="display:none;">
-          <div class="col-sm-12 connecting-text">
+          <div class="col-sm-12 connecting-text" ng-show="user.cues == 'No'">
             Successfully connected with four other users : A, B, D & E. <br/>
-            You will be referred to as <img src ="./assets/icons/c.png" width="40>".
+            You will be referred to as <img src ="./assets/icons/c.png" width="40"/>
+          </div>
+          <div class="col-sm-12 connecting-text" ng-show="user.cues == 'Yes'">
+            Successfully connected with four other users!<br/>
+            Your username will be <b> {{user.name}} </b>.
           </div>
         </div>
 

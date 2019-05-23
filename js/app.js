@@ -40,7 +40,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $("#connection-pending").css("display", "none");
         $("#connection-success").css("display", "block");
         $("#submit-section").css("display", "block");
-      }, 4500);
+      }, 8500);
 
     }
   }
