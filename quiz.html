@@ -25,7 +25,7 @@
           <div id="qBox" style="text-align: center; padding:15px;">
 
             <div class="row">
-              <p class="question-text"> <span ng-if="question.questionNumber >= 0"> Q{{currentQIndex - 1}}. </span>{{question.questionText}}</p>
+              <p class="question-text"> <span> Q{{currentQIndex}}. </span>{{question.questionText}}</p>
               <div id="image-container" style="margin-bottom: 15px;">
                 <img ng-if='question.img' src="{{question.img}}" style="width:220px; height:125px;">
               </div>
@@ -69,11 +69,12 @@
 
       <div class="col-sm-6 chartdiv" id="chart-area">
         <div id="chart_div" style="display:none;margin-left: 3%;margin-top:3%;">
-          <div style="font-weight:bold;margin-bottom:1%;">See how others have answered this question...</div>
-          <div class="row option-row" ng-repeat="option in controlFeedback">
-            <div class="col-sm-3 option-box">{{option.answer}}</div>
-            <div class="col-sm-9" style="padding-left:10px;padding-right:0px;">
-              <img ng-repeat="block in option.value" src="./assets/{{block.src}}" class="control-box" ng-class="{'cbox': '{{block.src}}' == 'dash.png'}" />
+          <div style="font-weight:bold;margin-bottom:1%;">Results of the group to this question (your answer is highlighted)..</div>
+          <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 3)}">
+            <div class="col-sm-2 option-box"> <img src ="./assets/icons/{{option.avatar}}" width="50"></div>
+            <div class="col-sm-9 feedback-explanation-box">
+              <div class="col-sm-12" style="padding: 3px;"><b>Answer : </b>{{option.answer}}</div>
+              <div class="col-sm-12 explanation-area"><b>Explanation : </b>{{option.explanation}}</div>
             </div>
           </div>
         </div>
@@ -82,8 +83,8 @@
       </div>
 
       <div class="col-sm-6 avatardiv" id="avatar-area">
-        <div id="avatar_div" style="display:none;margin-left: 3%;margin-top:3%;">
-          <div style="font-weight:bold;margin-bottom:1%;">See how others have answered this question...</div>
+        <div id="avatar_div" style="display:none;margin-left: 3%;margin-top:5%;">
+          <div style="font-weight:bold;margin-bottom:1%;">Results of the group...</div>
           <div class="row option-row" ng-repeat="option in feedback">
             <div class="col-sm-3 option-box">{{option.answer}}</div>
             <div class="col-sm-9" style="padding-left:5px;padding-right:0px;">

@@ -21,10 +21,11 @@
 <body>
 
   <div ng-app="app" ng-controller="HomeController">
-    <div class="container">
-      <div class="row" style="text-align:center;">
+    <div class="index-main-container">
+      <div class="col-sm-6 index-container">
+        <div class="welcome-text">Welcome!</div>
         <div style="margin-bottom: 20px;">
-          Welcome to Quiz Master! Thank you for agreeing to participate in this study. <br>
+          Thank you for agreeing to participate in this study. <br>
           To get started, enter your details in the form given below. <br>
           All fields are required (marked in <span style="color:red;">*</span>).
           <br>
@@ -35,7 +36,7 @@
             <table style="width:100%;">
 
               <tr class="row">
-                <td class="col-sm-6 right padding-adjust-labels"> Con A: (to be selected by the researcher) <span style="color:red;">*</span></td>
+                <td class="col-sm-6 right padding-adjust-labels"> Cues (to be selected by the researcher): <span style="color:red;">*</span></td>
                 <td class="col-sm-6" style="padding-top: 10px;">
                   <select required ng-model="user.cues" class="input-text">
                     <option value="">None</option>
@@ -46,7 +47,7 @@
               </tr>
 
               <tr class="row">
-                <td class="col-sm-6 right padding-adjust-labels"> Con B: (to be selected by the researcher) <span style="color:red;">*</span></td>
+                <td class="col-sm-6 right padding-adjust-labels"> Discussion (to be selected by the researcher): <span style="color:red;">*</span></td>
                 <td class="col-sm-6" style="padding-top: 10px;">
                   <select required ng-model="user.discussion" class="input-text">
                     <option value="">None</option>
@@ -142,16 +143,77 @@
 
             </table>
             <br>
+
             <div class="row">
+              <div class="col-sm-8">
+                <button id="index-next" class="index-next" ng-click="indexNext(user)">Next</button>
+              </div>
+            </div>
+
+            <!-- <div class="row">
               <div class="col-sm-8">
                 <button id="index-submit-button" class="submit-details" style="float:right;" ng-click="submitDetails(user)">Let's get started!</button>
               </div>
               <div class="col-sm-4">
                 <div id="index-loader" class="index-loader"></div>
               </div>
-            </div>
+            </div> -->
           </form>
         </div>
+      </div>
+
+      <div id="index-instructions" class="col-sm-5 index-container" style="text-align:center;margin-left: 25px;display:none;">
+        <div class="welcome-text">What do I have to do?</div>
+        <div>You will be taking part in this <b>multilple-choice quiz</b> with <b style="font-size:25px;">FOUR</b> other anonymous users.
+          <br/> For each question follow the following steps.</div>
+
+        <div class="row instruction">
+          <div class="col-sm-2"><img src="./assets/1.png" width = "50"></div>
+          <div class="col-sm-10 instruction-text">Select an answer, provide your confidence and explanation.</div>
+        </div>
+
+        <div class="row instruction">
+          <div class="col-sm-2"><img src="./assets/2.svg" width = "50"></div>
+          <div class="col-sm-10 instruction-text">See how other participants answered the same question.</div>
+        </div>
+
+        <div class="row instruction">
+          <div class="col-sm-2"><img src="./assets/3.svg" width = "50"></div>
+          <div class="col-sm-10 instruction-text">Update your answer, confidence or explanation if needed.</div>
+        </div>
+
+        <div class="row instruction">
+          <div class="col-sm-2"><img src="./assets/4.png" width = "50"></div>
+          <div class="col-sm-10 instruction-text">Submit your final answer.</div>
+        </div>
+
+        <div class="row" id="connection-pending" style="display:none;">
+          <div class="col-sm-8 connecting-text">
+            Connecting you with other users...
+          </div>
+          <div class="col-sm-4">
+            <div id="index-loader" class="index-loader" style="margin-top:7px! important; display:block;"></div>
+          </div>
+        </div>
+
+        <div class="row" id="connection-success" style="display:none;">
+          <div class="col-sm-12 connecting-text">
+            Successfully connected with four other users : A, B, D & E. <br/>
+            You will be referred to as <img src ="./assets/icons/c.png" width="40>".
+          </div>
+        </div>
+
+        <div class="row" id="submit-section" style="display:none;">
+          <div class="col-sm-8">
+            <button id="index-submit-button" class="index-submit" style="float:right;" ng-click="submitDetails(user)">Let's get started!</button>
+          </div>
+          <div class="col-sm-4">
+            <div id="index-loader" class="index-loader"></div>
+          </div>
+        </div>
+
+      </div>
+
 </body>
 
 </html>

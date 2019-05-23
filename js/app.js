@@ -15,7 +15,7 @@ app.controller('BigFiveController', function($scope, $http, $window) {
 
 });
 
-app.controller('HomeController', function($scope, $http, $window) {
+app.controller('HomeController', function($scope, $http, $window, $timeout) {
   $scope.user = {};
 
   $('#gender-specified').change(function() {
@@ -25,6 +25,25 @@ app.controller('HomeController', function($scope, $http, $window) {
       $('#gender-text').prop('required', false);
     }
   });
+
+  $scope.indexNext = function(user){
+    if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
+      $("#index-next").attr('disabled', true);
+      $("#index-next").css('background-color', 'grey');
+      $("#index-instructions").css("display", "block");
+
+      $timeout(function() {
+        $("#connection-pending").css("display", "block");
+      }, 1500);
+
+      $timeout(function() {
+        $("#connection-pending").css("display", "none");
+        $("#connection-success").css("display", "block");
+        $("#submit-section").css("display", "block");
+      }, 4500);
+
+    }
+  }
 
   $scope.submitDetails = function(user) {
     if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
@@ -177,7 +196,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         $timeout(function() {
           if ($scope.myAnswer.cues != "Yes") {
-            $scope.createChart(response.data);
+            $scope.createControlFeedback(response.data);
           } else {
             $scope.avatarFeedback(response.data);
           }
@@ -295,8 +314,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   };
 
-  $scope.createChart = function(chartData) {
-    $scope.controlFeedback = chartData.answers;
+  $scope.createControlFeedback = function(feedback) {
+    $scope.controlFeedback = feedback;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
 

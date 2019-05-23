@@ -2,6 +2,9 @@
   padding: 5px;
   height: 43px;
   width: 542px;
+  border-radius: 4px;
+  border: 2px solid;
+  color: grey;
 }
 
 .explanation-container{
@@ -37,16 +40,36 @@
   border: solid 1px;
 }
 
-.option-row{
-  padding-top: 5px;
+.control-option-row{
+  border-radius: 11px;
+  padding: 6px;
+  margin-bottom: 10px;
+  width: 615px;
 }
 
 .option-box {
-  width: 125px;
-  height: 75px;
   text-align: center;
   font-size: medium;
-  padding: 25px 0;
+}
+
+.explanation-area{
+  padding: 3px;
+  overflow-y: scroll;
+  height: 26px;
+}
+
+.my-answer{
+  background-color: #D6EAF8;
+  border: 1.5px solid black;
+}
+
+.feedback-explanation-box{
+  padding-left: 10px;
+  padding-right: 0px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: 55px;
+  width: 500px;
 }
 
 .avatar-box{
@@ -86,7 +109,43 @@ input[type=radio]+label>img {
 }
 
 .specify-text {
-  width: 57%;
+  width: 42%;
+}
+
+.index-next{
+  float: right;
+  width: 40%;
+  height: 43px;
+  background-color: #117A65;
+  font-size: 19px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
+}
+
+.instruction{
+  margin-top:20px;
+  background: #D6EAF8;
+  border-radius: 9px;
+  padding: 6px;
+}
+
+.index-container{
+  text-align: center;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.welcome-text{
+  font-size: 29px;
+  color: #117A65;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.instruction-text{
+  text-align: left;
+  font-size: 19px;
 }
 
 .last-line {
@@ -112,7 +171,7 @@ input[type=radio]+label>img {
 }
 
 .question-container {
-  width: 64%;
+  /* width: 64%; */
   margin-left: auto;
   margin-right: auto;
 }
@@ -157,6 +216,31 @@ input[type=radio]+label>img {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.index-main-container{
+  background-color: #F8F9F9;
+}
+
+.connecting-text{
+  font-size: 20px;
+  text-align: left;
+  margin-top: 15px;
+  color: #21618C;
+  font-weight: 600;
+  padding: 0px;
+}
+
+.index-submit{
+  margin-top:17px;
+  float: right;
+  width: 60%;
+  height: 43px;
+  background-color: #117A65;
+  font-size: 19px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
 }
 
 .padding-adjust-labels {
@@ -255,7 +339,7 @@ input[type=radio]+label>img {
 }
 
 .question-text {
-  font-size: 23px;
+  font-size: 20px;
   padding: 5px;
 }
 
@@ -420,7 +504,7 @@ body {
 .index-loader {
   display: none;
   float: left;
-  margin-top: -9px;
+  margin-top: 13px;
   margin-left: auto;
   margin-right: auto;
   border: 10px solid #f3f3f3;
