@@ -89,14 +89,17 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
+    $("#confidence-container").css("border", "none");
+    $(".explanation-box").css("border", "2px solid red");
     if ($scope.explaned){
       $("#submit-button").css("display", "block");
+      $(".explanation-box").css("border", "2px solid grey");
     }
   });
 
-  $('.explanation-box').change(function(){
+  $('.explanation-box').keyup(function(){
     $scope.explaned = true;
-    if ($scope.sliderChanged){
+    if ($scope.sliderChanged && $scope.myAnswer.explanation != ""){
       $("#submit-button").css("display", "block");
     }
   });
@@ -144,35 +147,21 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Show only when the answer is selected
   $scope.clicked = function() {
-
     //Resetting the red line
     if ($scope.question.questionNumber < 0) {
       $("#qBox").css("border", "none");
       $("#confidence-container").css("border", "solid red");
-
       $("#confidence-container").css("display", "block");
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "Next, move the slider to show how confident you are of the selected answer. Higher the confidence, higher the value selected should be."
-      });
     } else {
       $("#confidence-container").css("display", "block");
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "Move the slider to show how confident you are of the selected answer. Click on submit when done!"
-      });
     }
-
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
   };
 
   $scope.submitAnswer = function() {
-
     if ($scope.sliderChanged && $scope.explaned) {
       //Remove the button
       $("#submit-button").css("display", "none");
+      $(".explanation-box").css("border", "2px solid grey");
       //Disbling the input
       $("input[type=radio]").attr('disabled', true);
       $("input[type=range]").attr('disabled', true);
@@ -187,6 +176,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.cues = $scope.cues;
       $scope.myAnswer.discussion = $scope.discussion;
 
+      console.log($scope.myAnswer);
+
       $http({
         method: 'POST',
         url: api + '/feedback',
@@ -200,7 +191,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           } else {
             $scope.avatarFeedback(response.data);
           }
-          $scope.showSummary(response.data.description);
+          // $scope.showSummary(response.data.description);
         }, 3000);
 
       }, function(error) {
@@ -221,8 +212,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.avatarFeedback = function(data) {
-    $scope.feedback = data.answers;
-
+    $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
 

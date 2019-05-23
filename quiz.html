@@ -53,16 +53,20 @@
                 <output id="output" for="rangeInput">Not Selected</output>
               </div>
               <div class="explanation-container">
-                <textarea class="explanation-box" ng-model="myAnswer.explanation" placeholder="Why do you think this answer is the correct one? Enter your explanation here.." required>
+                <form>
+                  <textarea class="explanation-box" ng-model="myAnswer.explanation" placeholder="Why do you think this answer is the correct one? Enter your explanation here.." >
                     Enter your explanation here..
-                </textarea>
+                  </textarea>
+                  <div style="margin-top:20px;" class="button">
+                    <button id="submit-button" style="display:none;" class="submit-button" ng-click="(count == 0) ? submitAnswer() : update()">Submit</button>
+                      <!-- <input id="submit-button" style="display:none;" class="submit-button" type="submit" ng-click="(count == 0) ? submitAnswer() : update()" /> -->
+                  </div>
+                </form>
               </div>
             </div>
 
 
-            <div class="button" style="margin-top:20px;">
-              <input id="submit-button" style="display:none;" class="submit-button" type="submit" ng-click="(count == 0) ? submitAnswer() : update()" />
-            </div>
+
           </div>
         </form>
       </div>
@@ -83,12 +87,13 @@
       </div>
 
       <div class="col-sm-6 avatardiv" id="avatar-area">
-        <div id="avatar_div" style="display:none;margin-left: 3%;margin-top:5%;">
-          <div style="font-weight:bold;margin-bottom:1%;">Results of the group...</div>
-          <div class="row option-row" ng-repeat="option in feedback">
-            <div class="col-sm-3 option-box">{{option.answer}}</div>
-            <div class="col-sm-9" style="padding-left:5px;padding-right:0px;">
-              <img ng-repeat="avatar in option.value" src="./assets/{{avatar.src}}" class="avatar-box" />
+        <div id="avatar_div" style="display:none;margin-left: 3%;margin-top:3%;">
+          <div style="font-weight:bold;margin-bottom:1%;">Results of the group to this question (your answer is highlighted)..</div>
+          <div class="row control-option-row" ng-repeat="option in feedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 1)}">
+            <div class="col-sm-2 option-box"> <img src ="./assets/{{option.avatar}}" width="50"></div>
+            <div class="col-sm-9 feedback-explanation-box">
+              <div class="col-sm-12" style="padding: 3px;"><b>Answer : </b>{{option.answer}}</div>
+              <div class="col-sm-12 explanation-area"><b>Explanation : </b>{{option.explanation}}</div>
             </div>
           </div>
         </div>
