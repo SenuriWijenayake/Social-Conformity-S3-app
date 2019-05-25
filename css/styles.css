@@ -44,7 +44,7 @@
   border-radius: 11px;
   padding: 6px;
   margin-bottom: 10px;
-  width: 615px;
+  width: 93%;
 }
 
 .option-box {
@@ -55,7 +55,7 @@
 .explanation-area{
   padding: 3px;
   overflow-y: scroll;
-  height: 26px;
+  height: 40px;
 }
 
 .my-answer{
@@ -68,8 +68,8 @@
   padding-right: 0px;
   border: 1px solid grey;
   border-radius: 5px;
-  height: 55px;
-  width: 500px;
+  height: 70px;
+  overflow-y: scroll;
 }
 
 .avatar-box{

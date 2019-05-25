@@ -60,6 +60,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $window.sessionStorage.setItem('userId', response.data.id);
         $window.sessionStorage.setItem('cues', user.cues);
         $window.sessionStorage.setItem('discussion', user.discussion);
+        $window.sessionStorage.setItem('username', user.name);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
 
@@ -78,6 +79,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.userId = $window.sessionStorage.getItem('userId');
   $scope.cues = $window.sessionStorage.getItem('cues');
   $scope.discussion = $window.sessionStorage.getItem('discussion');
+  $scope.currentUsername = $window.sessionStorage.getItem('username');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
 
   $scope.question = {};
