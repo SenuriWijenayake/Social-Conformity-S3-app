@@ -1,4 +1,4 @@
-.explanation-box{
+.explanation-box {
   padding: 5px;
   height: 43px;
   width: 542px;
@@ -7,40 +7,40 @@
   color: grey;
 }
 
-.explanation-container{
+.explanation-container {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.name-row{
+.name-row {
   padding-left: 10px;
   padding-right: 0px;
   padding-top: 20px;
   height: 75px;
 }
 
-.name-box{
+.name-box {
   width: 70px;
   margin-right: 7px;
   font-size: 22px;
   text-align: center;
 }
 
-.cbox{
+.cbox {
   width: 70px;
-  height:70px;
+  height: 70px;
   margin-right: 7px;
   border: none ! important;
 }
 
-.control-box{
+.control-box {
   width: 70px;
-  height:70px;
+  height: 70px;
   margin-right: 7px;
   border: solid 1px;
 }
 
-.control-option-row{
+.control-option-row {
   border-radius: 11px;
   padding: 6px;
   margin-bottom: 10px;
@@ -52,18 +52,18 @@
   font-size: medium;
 }
 
-.explanation-area{
+.explanation-area {
   padding: 3px;
   overflow-y: scroll;
   height: 40px;
 }
 
-.my-answer{
+.my-answer {
   background-color: #D6EAF8;
   border: 1.5px solid black;
 }
 
-.feedback-explanation-box{
+.feedback-explanation-box {
   padding-left: 10px;
   padding-right: 0px;
   border: 1px solid grey;
@@ -72,9 +72,9 @@
   overflow-y: scroll;
 }
 
-.avatar-box{
+.avatar-box {
   width: 70px;
-  height:70px;
+  height: 70px;
   margin-right: 7px;
 }
 
@@ -112,7 +112,7 @@ input[type=radio]+label>img {
   width: 42%;
 }
 
-.index-next{
+.index-next {
   float: right;
   width: 40%;
   height: 43px;
@@ -123,27 +123,27 @@ input[type=radio]+label>img {
   border-radius: 5px;
 }
 
-.instruction{
-  margin-top:20px;
+.instruction {
+  margin-top: 20px;
   background: #D6EAF8;
   border-radius: 9px;
   padding: 6px;
 }
 
-.index-container{
+.index-container {
   text-align: center;
   border-radius: 10px;
   padding: 15px;
 }
 
-.welcome-text{
+.welcome-text {
   font-size: 29px;
   color: #117A65;
   font-weight: 800;
   margin-bottom: 5px;
 }
 
-.instruction-text{
+.instruction-text {
   text-align: left;
   font-size: 19px;
 }
@@ -218,11 +218,11 @@ input[type=radio]+label>img {
   margin-right: auto;
 }
 
-.index-main-container{
+.index-main-container {
   background-color: #F8F9F9;
 }
 
-.connecting-text{
+.connecting-text {
   font-size: 20px;
   text-align: left;
   margin-top: 15px;
@@ -231,8 +231,8 @@ input[type=radio]+label>img {
   padding: 0px;
 }
 
-.index-submit{
-  margin-top:17px;
+.index-submit {
+  margin-top: 17px;
   float: right;
   width: 60%;
   height: 43px;
@@ -319,7 +319,6 @@ input[type=radio]+label>img {
 /* .chartdiv {
   margin-left: -68px;
 } */
-
 .visible-image {
   display: inline;
 }
@@ -369,21 +368,27 @@ input[type=radio]+label>img {
 }
 
 .yes-button {
-  width: 50%;
+  width: 65%;
   float: right;
-  height: 35px;
-  font-size: 14px;
-  font-weight: bold;
   text-align: center;
+  height: 43px;
+  background-color: #117A65;
+  font-size: 19px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
 }
 
 .no-button {
-  width: 50%;
+  width: 65%;
   float: left;
-  height: 35px;
-  font-size: 14px;
-  font-weight: bold;
   text-align: center;
+  height: 43px;
+  background-color: #117A65;
+  font-size: 19px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
 }
 
 #confidence-container {

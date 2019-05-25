@@ -26,7 +26,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
     }
   });
 
-  $scope.indexNext = function(user){
+  $scope.indexNext = function(user) {
     if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
       $("#index-next").attr('disabled', true);
       $("#index-next").css('background-color', 'grey');
@@ -84,7 +84,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.question = {};
   $scope.sliderChanged = false;
-  $scope.explaned = false;
+  $scope.explained = false;
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
 
@@ -93,15 +93,15 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#output").css("color", "green");
     $("#confidence-container").css("border", "none");
     $(".explanation-box").css("border", "2px solid red");
-    if ($scope.explaned){
+    if ($scope.explained) {
       $("#submit-button").css("display", "block");
       $(".explanation-box").css("border", "2px solid grey");
     }
   });
 
-  $('.explanation-box').keyup(function(){
-    $scope.explaned = true;
-    if ($scope.sliderChanged && $scope.myAnswer.explanation != ""){
+  $('.explanation-box').keyup(function() {
+    $scope.explained = true;
+    if ($scope.sliderChanged && $scope.myAnswer.explanation != "") {
       $("#submit-button").css("display", "block");
     }
   });
@@ -160,7 +160,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.submitAnswer = function() {
-    if ($scope.sliderChanged && $scope.explaned) {
+    if ($scope.sliderChanged && $scope.myAnswer.explanation != "") {
       //Remove the button
       $("#submit-button").css("display", "none");
       $(".explanation-box").css("border", "2px solid grey");
@@ -178,8 +178,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.cues = $scope.cues;
       $scope.myAnswer.discussion = $scope.discussion;
 
-      console.log($scope.myAnswer);
-
       $http({
         method: 'POST',
         url: api + '/feedback',
@@ -193,7 +191,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           } else {
             $scope.avatarFeedback(response.data);
           }
-          // $scope.showSummary(response.data.description);
         }, 3000);
 
       }, function(error) {
@@ -209,90 +206,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#avatar_div").css("display", "block");
     $("#change-section").css("display", "block");
-
-  };
-
-  $scope.showSummary = function(summary) {
-    //Once the chart is visible add the training description
-    if ($scope.question.questionNumber < 0) {
-      $("#confidence-container").css("border", "none");
-      $("#change-section").css("display", "none");
-
-      if ($scope.myAnswer.cues == "control") {
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "The chart given above demonstrates how other participants attempted the same question. Each square represents one participant (out of a total 7) who selected the corresponding answer option."
-          });
-        }, 500);
-      } else if ($scope.myAnswer.cues == "avatar") {
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "The chart given above demonstrates how other participants attempted the same question. Each avatar represents a participant (out of a total 7) who selected the corresponding answer option."
-          });
-        }, 500);
-      } else {
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "The chart given above demonstrates how other participants attempted the same question. Each name represents a participant (out of a total 7) who selected the corresponding answer option."
-          });
-        }, 500);
-      }
-
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 500);
-
-      $timeout(function() {
-        $scope.history.push(summary);
-      }, 4000);
-
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 4000);
-
-      $timeout(function() {
-        $scope.history.push({
-          name: "QuizBot",
-          msg: "At this point, you may do one of the following:"
-        });
-        $scope.history.push({
-          msg: "Option 1 : Change the answer option and select new confidence level"
-        });
-        $scope.history.push({
-          msg: "Option 2 : Keep the answer option unchanged and select new confidence level"
-        });
-        $scope.history.push({
-          msg: "Option 3 : Make no changes and go ahead to the next question"
-        });
-      }, 8000);
-
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 8000);
-
-      $timeout(function() {
-        $("#change-section").css("border", "solid red");
-        $("#change-section").css("display", "block");
-        $scope.history.push({
-          name: "QuizBot",
-          msg: "For training purposes, let's make a change to the answer. Click on 'YES' to make a change or 'NO' to go to the next question."
-        });
-      }, 12000);
-
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 12000);
-
-    } else {
-      $scope.history.push(summary);
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 500);
-    }
-
+    $("#change-section").css("border", "solid red");
   };
 
   $scope.createControlFeedback = function(feedback) {
@@ -302,7 +216,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#chart_div").css("display", "block");
     $("#change-section").css("display", "block");
-
+    $("#change-section").css("border", "solid red");
   };
 
   $scope.yes = function() {
@@ -312,27 +226,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#submit-button").css("display", "none");
     $("#change-section").css("border", "none");
 
-    if ($scope.question.questionNumber < 0) {
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "You can now change your answer and confidence."
-      });
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 500);
-    } else {
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "You can now change your answer and confidence. Click on 'Submit' to confirm your answer."
-      });
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 500);
-    }
-
     //Make the input enabled
     $("input[type=radio]").attr('disabled', false);
     $("input[type=range]").attr('disabled', false);
+    $(".explanation-box").attr('disabled', false);
 
     //Remove change section buttons
     $("#change-section").css("display", "none");
@@ -340,19 +237,21 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Set the confidence to 50
     $scope.myAnswer.confidence = 50;
     $scope.sliderChanged = false;
+    $scope.explained = false;
+
+    $(".explanation-box").val("");
     $("#output").val("Not Specified");
     $("#output").css("color", "red");
   };
 
   $scope.update = function() {
 
-    if ($scope.sliderChanged) {
+    if ($scope.sliderChanged && $scope.explained) {
 
       //Remove the question area and chart area
       $("#question-area").css("display", "none");
       $("#chart-area").css("display", "none");
       $("#avatar-area").css("display", "none");
-      $("#names-area").css("display", "none");
       $("#change-section").css("display", "none");
 
       //Disable the button
@@ -360,9 +259,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
+      $scope.myAnswer.explanation = $scope.myAnswer.explanation;
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
-      $scope.myAnswer.discussion = $scope.discussion;
 
       $http({
         method: 'POST',
@@ -382,7 +281,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
     $("#avatar-area").css("display", "none");
-    $("#names-area").css("display", "none");
     $("#change-section").css("display", "none");
 
     $scope.count = 0;
@@ -390,12 +288,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Make the input enabled and submit invisible
     $("input[type=radio]").attr('disabled', false);
     $("input[type=range]").attr('disabled', false);
+    $(".explanation-box").attr('disabled', false);
+
     $("#submit-button").css("display", "none");
     $("#confidence-container").css("display", "none");
     $("#change-section").css("border", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 40) {
+    if ($scope.currentQIndex == 17) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -419,10 +319,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     } else {
       $scope.userId = $window.sessionStorage.getItem('userId');
       var data = {
-        set: $scope.discussion,
         id: $scope.order[$scope.currentQIndex]
       };
-      console.log($scope.currentQIndex);
 
       $http({
         method: 'POST',
@@ -435,34 +333,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#question-area").css("display", "block");
         $("#chart-area").css("display", "block");
         $("#avatar-area").css("display", "block");
-        $("#names-area").css("display", "block");
         $("#change-section").css("display", "block");
 
         $scope.myAnswer = {};
         $scope.sliderChanged = false;
         $scope.myAnswer.confidence = 50;
+        $(".explanation-box").val("");
         $scope.question = response.data;
-
-        if ($scope.currentQIndex == 1) {
-          $("#question-area").css("display", "none");
-          $scope.userState = "trained";
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "The training is complete! You may now attempt the quiz. The quiz contains 39 multiple-choice questions. To start the quiz type 'GO'. Do NOT refresh the page or go back during the quiz."
-          });
-
-          $timeout(function() {
-            $scope.scrollAdjust();
-          }, 500);
-        } else {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "Moving to the next question (" + $scope.currentQIndex.toString() + "/39). If you need my help with words type 'HELP'."
-          });
-          $timeout(function() {
-            $scope.scrollAdjust();
-          }, 500);
-        }
 
         if ($scope.question.img) {
           $("#image-container").css("display", "inline");
@@ -474,7 +351,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#loader-text").css("display", "none");
         $("#chart_div").css("display", "none");
         $("#avatar_div").css("display", "none");
-        $("#names_div").css("display", "none");
+
         $("#change-section").css("display", "none");
         $("#submit-button").prop("disabled", false);
         $("#output").val("Not Specified");
