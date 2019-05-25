@@ -74,7 +74,7 @@
       <div class="col-sm-6 chartdiv" id="chart-area">
         <div id="chart_div" style="display:none;margin-left: 10%;margin-top:3%;">
           <div style="font-weight:bold;margin-bottom:3%;">Results of the group to this question (your answer is highlighted)..</div>
-          <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 1)}">
+          <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box"> <img src="./assets/icons/{{option.avatar}}" width="50"></div>
             <div class="col-sm-10 feedback-explanation-box">
               <div class="col-sm-12" style="padding: 3px;font-size: 23px;">{{option.answer}}</div>
@@ -106,7 +106,7 @@
       </div>
 
       <div class="row">
-        <div id="change-section" class="col-sm-12" style="margin-bottom:50px;display:none;margin-left:25%;padding:20px;width:50%;">
+        <div id="change-section" class="col-sm-12" style="display:none;" ng-class="{'change-area-no-discuss': (discussion == 'No'), 'change-area-discuss' : (discussion == 'Yes')}">
           <div id="descr">
             <p class="change-text">Would you like to make changes to your answer, confidence or explanation?</p>
           </div>

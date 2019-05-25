@@ -1,3 +1,17 @@
+.change-area-no-discuss{
+  margin-bottom:50px;
+  margin-left:25%;
+  padding:20px;
+  width:50%;
+}
+
+.change-area-discuss{
+  margin-bottom:50px;
+  margin-left:2%;
+  padding:20px;
+  width:50%;
+}
+
 .explanation-box {
   padding: 5px;
   height: 43px;
