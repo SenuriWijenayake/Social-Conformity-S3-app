@@ -77,7 +77,7 @@
           <div class="row control-option-row" ng-repeat="option in controlFeedback | orderBy : 'order'" ng-style="" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box"> <img src ="./assets/icons/{{option.avatar}}" width="50"></div>
             <div class="col-sm-10 feedback-explanation-box">
-              <div class="col-sm-12" style="padding: 3px;"><b>Answer : </b>{{option.answer}}</div>
+              <div class="col-sm-12" style="padding: 3px;font-size: 23px;">{{option.answer}}</div>
               <!-- <div class="col-sm-12 explanation-area"><b>Explanation : </b>{{option.explanation}}</div> -->
             </div>
           </div>
@@ -96,7 +96,7 @@
               <div style="font-weight: bold;" ng-if="(option.order != 1)">{{option.username}}</div>
             </div>
             <div class="col-sm-10 feedback-explanation-box">
-              <div class="col-sm-12" style="padding: 3px;"><b>Answer : </b>{{option.answer}}</div>
+              <div class="col-sm-12" style="padding: 3px;font-size: 23px;">{{option.answer}}</div>
               <!-- <div class="col-sm-12 explanation-area"><b>Explanation : </b>{{option.explanation}}</div> -->
             </div>
           </div>
