@@ -155,7 +155,7 @@
         <div class="minimize">
         </div>
         <div class="textarea" id="text-area">
-          <div ng-repeat="line in history" ng-class="{'last-line':$last}">
+          <div ng-repeat="line in history" class="chat-messages" ng-class="{'last-line':$last}">
             <b ng-if='line.name'> {{line.name}} : </b> {{line.msg}}
           </div>
         </div>

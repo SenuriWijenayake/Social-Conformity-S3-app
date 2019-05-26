@@ -457,7 +457,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.scrollAdjust();
       $scope.welcome();
       $("#chat-text").focus();
-    }, 500);
+    }, 1000);
   });
 
   $scope.welcome = function() {

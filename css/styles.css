@@ -1,3 +1,10 @@
+.chat-messages{
+  padding: 3px;
+  background-color: #E5E7E9;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+
 .change-area-no-discuss{
   margin-bottom:50px;
   margin-left:25%;
