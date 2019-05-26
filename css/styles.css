@@ -57,13 +57,23 @@
 .control-option-row {
   border-radius: 11px;
   padding: 6px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   width: 100%;
 }
 
 .option-box {
   text-align: center;
   font-size: medium;
+}
+
+.avatar-image{
+  width: 30px;
+}
+
+.username{
+  font-size: 15px;
+  overflow-x: scroll;
+  font-weight: bold;
 }
 
 .explanation-area {
@@ -82,7 +92,7 @@
   padding-right: 0px;
   border: 1px solid grey;
   border-radius: 5px;
-  height: 70px;
+  height: 50px;
   overflow-y: scroll;
 }
 
