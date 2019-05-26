@@ -588,18 +588,30 @@ body {
   width: 45%;
   height: 250px;
   border: grey solid 1px;
+  border-radius: 6px;
   float: right;
   margin: 10px;
   position: fixed;
   bottom: 0;
   right: 0;
-  background: #F8F8F8;
+  background: #F8F9F9;
   padding: 0px;
+}
+
+.send-button{
+  text-align: center;
+  width: 13%;
+  background-color: #117A65;
+  font-size: 16px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
 }
 
 .minimize {
   border-bottom: grey solid 1px;
   height: 22px;
+  background-color: #117A65;
 }
 
 .textarea {
@@ -617,4 +629,7 @@ body {
 
 .text-box {
   width: 86%;
+  border-radius: 3px;
+  border: 1px solid;
+  padding: 3px;
 }
