@@ -51,7 +51,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
 
-      if (!user.name){
+      if (!user.name) {
         user.name = "User C";
       }
 
@@ -92,13 +92,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
 
-  $(function() {
-    var socket = io.connect('http://localhost:5000');
-    socket.emit('printMe', {
-      'name': $scope.currentUsername
-    })
-  });
-
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
@@ -108,12 +101,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $(".explanation-box").css("border-color", "grey");
     } else {
       $(".explanation-box").css("border", "2px solid red");
-      $( ".explanation-box" ).focus();
+      $(".explanation-box").focus();
     }
   });
 
   $('.explanation-box').keyup(function() {
-    if ($scope.myAnswer.explanation != ""){
+    if ($scope.myAnswer.explanation != "") {
       $scope.explained = true;
       $(".explanation-box").css("border-color", "grey");
     }
@@ -141,8 +134,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#image-container").css("display", "none");
     }
 
-    $("#question-area").css("display", "inline");
-    $("#qBox").css("border", "solid red");
+    if($scope.discussion == 'No'){
+      $("#question-area").css("display", "inline");
+      $("#qBox").css("border", "solid red");
+    }
 
   }, function(error) {
     console.log("Error occured when getting the first question");
@@ -167,14 +162,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Show only when the answer is selected
   $scope.clicked = function() {
-    if(!$scope.explained){
-      $( ".explanation-box" ).focus();
+    if (!$scope.explained) {
+      $(".explanation-box").focus();
     }
     //Resetting the red line
     if ($scope.question.questionNumber < 0) {
       $("#qBox").css("border", "none");
       $("#confidence-container").css("display", "block");
-      if (!$scope.sliderChanged){
+      if (!$scope.sliderChanged) {
         $("#confidence-container").css("border", "solid red");
       }
     } else {
@@ -229,11 +224,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#avatar_div").css("display", "block");
 
-    if($scope.cues == 'No' && $scope.discussion == 'No'){
+    if ($scope.cues == 'No' && $scope.discussion == 'No') {
       $timeout(function() {
         $("#change-section-ncnd").css("display", "block");
       }, 2000);
-    } else if($scope.cues == 'Yes' && $scope.discussion == 'No'){
+    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
       $timeout(function() {
         $("#change-section-cnd").css("display", "block");
       }, 2000);
@@ -252,11 +247,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#chart_div").css("display", "block");
 
-    if($scope.cues == 'No' && $scope.discussion == 'No'){
+    if ($scope.cues == 'No' && $scope.discussion == 'No') {
       $timeout(function() {
         $("#change-section-ncnd").css("display", "block");
       }, 2000);
-    } else if($scope.cues == 'Yes' && $scope.discussion == 'No'){
+    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
       $timeout(function() {
         $("#change-section-cnd").css("display", "block");
       }, 2000);
@@ -280,9 +275,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $(".explanation-box").attr('disabled', false);
 
     //Remove change section buttons
-    if($scope.cues == 'No' && $scope.discussion == 'No'){
+    if ($scope.cues == 'No' && $scope.discussion == 'No') {
       $("#change-section-ncnd").css("display", "none");
-    } else if($scope.cues == 'Yes' && $scope.discussion == 'No'){
+    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
       $("#change-section-cnd").css("display", "none");
     } else {
       $("#change-section").css("display", "none");
@@ -429,45 +424,57 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }
   };
 
-  //Chatbot function to start the quiz
-  $scope.userState = "ready"; // Setting the inital stage
-
   //Function to adjust scrolling - not working
   $scope.scrollAdjust = function() {
     var element = document.getElementById("text-area");
     element.scrollTop = element.scrollHeight;
   };
 
-  $scope.train = function() {
-    $scope.userState = "trained"; //Started the training
+  //Connecting the client to the socket
+  $scope.userState = 'ready';
+  $scope.history = [];
+  var socket = io.connect('http://localhost:5000');
+  socket.emit('new_connection', {
+    'username': $scope.currentUsername
+  });
+
+  socket.on('new_message', (data) => {
+    $scope.history.push({
+      name: data.username,
+      msg: data.message
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 500);
+  });
+
+  socket.on('connected', (data) => {
+    $scope.history.push({
+      name: data.username,
+      msg: data.message
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+      $scope.welcome();
+      $("#chat-text").focus();
+    }, 500);
+  });
+
+  $scope.welcome = function() {
+    socket.emit('welcome', {
+      'username': $scope.currentUsername
+    });
+    $("#chat-text").focus();
+  };
+
+  $scope.go = function() {
+
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
 
     $scope.history.push({
       name: "QuizBot",
-      msg: "Given above is an example question that could appear in the quiz. As your mentor I can help you understand the question, by explaining what certain words included in the question mean."
-    });
-
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
-
-    $timeout(function() {
-      $scope.history.push({
-        msg: "Now, type 'HELP' to understand the meaning of difficult words in this question."
-      });
-    }, 500);
-
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
-  };
-
-  $scope.go = function() {
-    $("#question-area").css("display", "inline");
-    $scope.history.push({
-      name: "QuizBot",
-      msg: "You just started the quiz! As your mentor, I can help you understand the question by explaining what certain words in the question mean. If you need my help type 'HELP'."
+      msg: "You just started the quiz!"
     });
 
     $scope.userState = "started"; //Started the quiz
@@ -476,95 +483,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }, 500);
   };
 
-  $scope.help = function(words) {
-    if (words != undefined) {
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "I can explain the following words related to this question."
-      });
-
-      for (var i = 0; i < words.length; i++) {
-        var text = "";
-        text += (i + 1).toString() + " : " + words[i].key;
-        $scope.history.push({
-          msg: text
-        });
-      }
-      $scope.history.push({
-        msg: "Type 'EXPLAIN' and the word to find the meaning. e.g. EXPLAIN " + words[0].key
-      });
-      $scope.message = "";
-    } else {
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "Oops! Seems like there are no words I can help you with in this questions."
-      });
-      $scope.message = "";
-    }
-
-  };
-
-  $scope.explain = function(handle) {
-
-    var splitWords = handle.split(" ");
-    var word = "";
-
-    if (splitWords.length == 2) {
-      //Get the word
-      word = splitWords[1];
-    } else {
-      //For two word phrases
-      if (splitWords.length > 2) {
-        word = splitWords[1] + " " + splitWords[2];
-      }
-    }
-
-    var words = $scope.question.words;
-
-    //Check if a word was entered
-    if (word == undefined) {
-      $scope.history.push({
-        name: "QuizBot",
-        msg: "I am sorry. Seems like you did not enter a word. Type 'EXPLAIN' and the word to find the meaning. e.g. EXPLAIN " + words[0].key
-      });
-    } else {
-      //Check if the word is available in the given list
-      var index = $scope.isKeyAvailable(word.toLowerCase(), words);
-      if (index != -1) {
-        $scope.history.push({
-          name: "QuizBot",
-          msg: words[index].key + " => " + words[index].explaination
-        });
-
-      } else {
-        $scope.history.push({
-          name: "QuizBot",
-          msg: "I am sorry. I can't provide an interpretation for the word you entered."
-        });
-        $scope.help(words);
-      }
-    }
-    $scope.message = "";
-  };
-
-  $scope.error = function() {
-    $scope.history.push({
-      name: "QuizBot",
-      msg: "Oops! I don't recognize this command. Please try again."
-    });
-
-    //Check user state and repeat instruction
-    switch ($scope.userState) {
-      case 'help':
-        $scope.help($scope.question.words)
-        break;
-      default:
-        $scope.message = "";
-    }
-  };
 
   //Call sendMessage on Enter
-
   var chatBox = document.getElementById("chat-text");
 
   // Execute a function when the user releases a key on the keyboard
@@ -578,21 +498,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   });
 
   $scope.sendMessage = function() {
-
     if ($scope.message != undefined && $scope.message.trim().length != 0) {
-      $scope.history.push({
-        name: "You",
-        msg: $scope.message.toString()
-      });
-      $timeout(function() {
-        $scope.scrollAdjust();
-      }, 500);
-
       //Handle requests
       var handle = $scope.message.toLowerCase();
 
       if (handle == 'go') {
-        if ($scope.userState == "trained") {
+        if ($scope.userState == "ready") {
           $scope.go();
         } else {
           $scope.history.push({
@@ -601,27 +512,17 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           });
         }
         $scope.message = "";
-
-      } else if (handle == 'train') {
-        if ($scope.userState == "ready") {
-          $scope.train();
-        } else {
-          $scope.history.push({
-            name: "QuizBot",
-            msg: "You have already started the training."
-          });
-        }
-        $scope.message = "";
-      } else if (handle == 'help') {
-        $scope.userState = "help";
-        $scope.help($scope.question.words);
-
-      } else if (handle.includes('explain')) {
-        $scope.userState = "explain";
-        $scope.explain(handle);
       } else {
-        $scope.error(handle);
+        socket.emit('new_message', {
+          'username': $scope.currentUsername,
+          'message': $scope.message
+        });
       }
+
+      $scope.message = "";
+      $timeout(function() {
+        $scope.scrollAdjust();
+      }, 500);
     }
   };
 
