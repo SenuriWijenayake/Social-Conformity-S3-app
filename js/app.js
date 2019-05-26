@@ -51,6 +51,10 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
 
+      if (!user.name){
+        user.name = "User C";
+      }
+
       $http({
         method: 'POST',
         url: api + '/user',
