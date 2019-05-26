@@ -96,7 +96,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   });
 
   $("input[type='range']").change(function() {
-    alert("here");
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
     $("#confidence-container").css("border", "none");
@@ -105,6 +104,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $(".explanation-box").css("border-color", "grey");
     } else {
       $(".explanation-box").css("border", "2px solid red");
+      $( ".explanation-box" ).focus();
     }
   });
 
@@ -163,11 +163,16 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Show only when the answer is selected
   $scope.clicked = function() {
+    if(!$scope.explained){
+      $( ".explanation-box" ).focus();
+    }
     //Resetting the red line
     if ($scope.question.questionNumber < 0) {
       $("#qBox").css("border", "none");
-      $("#confidence-container").css("border", "solid red");
       $("#confidence-container").css("display", "block");
+      if (!$scope.sliderChanged){
+        $("#confidence-container").css("border", "solid red");
+      }
     } else {
       $("#confidence-container").css("display", "block");
     }
