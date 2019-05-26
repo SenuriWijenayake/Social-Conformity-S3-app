@@ -438,6 +438,21 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     'username': $scope.currentUsername
   });
 
+  //Sending the initial messages
+  $timeout(function() {
+    $scope.history.push({
+      name: "QuizBot",
+      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. You will be asked to answer 18 multilple-choice questions in this quiz, with four other participants."
+    });
+  }, 1000);
+
+  $timeout(function() {
+    $scope.history.push({
+      name: "QuizBot",
+      msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation." +
+      " If the instructions are clear, type GO to start the quiz!"});
+  }, 2000);
+
   socket.on('new_message', (data) => {
     $scope.history.push({
       name: data.username,
@@ -455,17 +470,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     });
     $timeout(function() {
       $scope.scrollAdjust();
-      $scope.welcome();
       $("#chat-text").focus();
     }, 1000);
   });
-
-  $scope.welcome = function() {
-    socket.emit('welcome', {
-      'username': $scope.currentUsername
-    });
-    $("#chat-text").focus();
-  };
 
   $scope.go = function() {
 
@@ -501,10 +508,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.message != undefined && $scope.message.trim().length != 0) {
       //Handle requests
       var handle = $scope.message.toLowerCase();
-
       if (handle == 'go') {
         if ($scope.userState == "ready") {
+          $scope.history.push({
+            name: $scope.currentUsername,
+            msg: $scope.message
+          });
           $scope.go();
+
         } else {
           $scope.history.push({
             name: "QuizBot",
