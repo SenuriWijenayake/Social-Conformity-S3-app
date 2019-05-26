@@ -148,6 +148,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.onbeforeunloadEnabled) {
       var dialogText = 'You have unsaved changes. Are you sure you want to leave the site?';
       e.returnValue = dialogText;
+
+      //Disconnect sockets if there are any
+      if($scope.discussion){
+        socket.disconnect();
+      }
       return dialogText;
     }
   };
