@@ -392,7 +392,7 @@ input[type=radio]+label>img {
 }
 
 .yes-button {
-  width: 65%;
+  width: 70%;
   float: right;
   text-align: center;
   height: 43px;
@@ -404,7 +404,7 @@ input[type=radio]+label>img {
 }
 
 .no-button {
-  width: 65%;
+  width: 70%;
   float: left;
   text-align: center;
   height: 43px;
