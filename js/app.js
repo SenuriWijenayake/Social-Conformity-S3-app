@@ -238,9 +238,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#change-section-cnd").css("display", "block");
       }, 2000);
     } else {
-      $timeout(function() {
-        $("#change-section").css("display", "block");
-      }, 2000);
+      // //Discussion conditions
+      // $timeout(function() {
+      //   $("#change-section").css("display", "block");
+      // }, 2000);
     }
 
   };
@@ -261,9 +262,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#change-section-cnd").css("display", "block");
       }, 2000);
     } else {
-      $timeout(function() {
-        $("#change-section").css("display", "block");
-      }, 2000);
+      // $timeout(function() {
+      //   $("#change-section").css("display", "block");
+      // }, 2000);
     }
   };
 
@@ -445,24 +446,50 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $timeout(function() {
     $scope.history.push({
       name: "QuizBot",
-      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. You will be asked to answer 18 multilple-choice questions in this quiz, with four other participants."
+      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
 
   $timeout(function() {
     $scope.scrollAdjust();
-  }, 1500);
+  }, 1000);
 
   $timeout(function() {
     $scope.history.push({
       name: "QuizBot",
       msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."});
-  }, 2000);
+  }, 3000);
 
   $timeout(function() {
     $scope.scrollAdjust();
-  }, 2000);
+  }, 3000);
 
+  //When you get the start signal
+  socket.on('ready', (data) => {
+    $("#chat-text").attr("disabled", false);
+    $(".send-button").css("background-color", "#117A65");
+    $(".send-button").css("border", "1px solid #117A65");
+
+    $scope.history.push({
+      name: data.username,
+      msg: data.message
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 500);
+
+    $timeout(function() {
+      $scope.history.push({
+        name: "QuizBot",
+        msg: "Type 'GO' to start the quiz."
+      });
+    }, 1500);
+
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 1500);
+
+  });
 
   //When you receive a new broadcast message
   socket.on('new_message', (data) => {
@@ -496,15 +523,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
 
-    $scope.history.push({
-      name: "QuizBot",
-      msg: "You just started the quiz!"
-    });
-
     $scope.userState = "started"; //Started the quiz
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
   };
 
 
@@ -540,11 +559,32 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           });
         }
         $scope.message = "";
+      } else if(handle == "done"){
+          socket.emit('new_message', {
+            'username': $scope.currentUsername,
+            'message': $scope.message
+          });
+
+          $timeout(function() {
+            $scope.history.push({
+              name: "QuizBot",
+              msg: "You may change your answer, confidence or explanation now."
+            });
+          }, 1000);
+
+        //Show change box
+        $timeout(function() {
+          $("#change-section").css("display", "block");
+        }, 1500);
+
       } else {
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message
         });
+        $timeout(function() {
+          $scope.scrollAdjust();
+        }, 500);
       }
 
       $scope.message = "";
