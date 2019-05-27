@@ -478,6 +478,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   });
 
   $scope.go = function() {
+    socket.emit('started', {
+      'username': $scope.currentUsername,
+      'question' : $scope.question
+    });
 
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
