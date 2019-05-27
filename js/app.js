@@ -272,7 +272,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.count = 1;
 
     $("#submit-button").css("display", "none");
-    $("#change-section").css("border", "none");
 
     //Make the input enabled
     $("input[type=radio]").attr('disabled', false);
@@ -352,7 +351,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#submit-button").css("display", "none");
     $("#confidence-container").css("display", "none");
-    $("#change-section").css("border", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
     if ($scope.currentQIndex == 17) {
