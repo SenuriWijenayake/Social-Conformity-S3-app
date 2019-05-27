@@ -450,12 +450,21 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   }, 1000);
 
   $timeout(function() {
+    $scope.scrollAdjust();
+  }, 1500);
+
+  $timeout(function() {
     $scope.history.push({
       name: "QuizBot",
-      msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation." +
-      " If the instructions are clear, type GO to start the quiz!"});
+      msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."});
   }, 2000);
 
+  $timeout(function() {
+    $scope.scrollAdjust();
+  }, 2000);
+
+
+  //When you receive a new broadcast message
   socket.on('new_message', (data) => {
     $scope.history.push({
       name: data.username,
@@ -466,6 +475,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }, 500);
   });
 
+  //When someone connected to the channel
   socket.on('connected', (data) => {
     $scope.history.push({
       name: data.username,
