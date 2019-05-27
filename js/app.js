@@ -210,9 +210,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         $timeout(function() {
           if ($scope.myAnswer.cues != "Yes") {
-            $scope.createControlFeedback(response.data);
+            $scope.createControlFeedback(response.data.feedback);
           } else {
-            $scope.avatarFeedback(response.data);
+            $scope.avatarFeedback(response.data.feedback);
           }
         }, 3000);
 
