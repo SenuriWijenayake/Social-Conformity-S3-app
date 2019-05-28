@@ -28,7 +28,7 @@
             <div class="row">
               <p class="question-text"> <span> Q{{currentQIndex}}. </span>{{question.questionText}}</p>
               <div id="image-container" style="margin-bottom: 15px;">
-                <img ng-if='question.img' src="{{question.img}}" style="width:220px; height:125px;">
+                <img ng-show='question.img' src="{{question.img}}" style="width:220px; height:125px;">
               </div>
             </div>
 
@@ -156,11 +156,11 @@
         <div class="textarea" id="text-area">
           <div ng-repeat="line in history" class="chat-messages" ng-class="{'last-line':$last, 'joined' : {{line.class == 'joined'}}, 'status' : {{line.class == 'status'}}}">
             <div class="row">
-              <div class="col-sm-1" style="margin-left:10px;padding-right:0px;">
+              <div class="col-sm-1" style="margin-left:27px;padding-right:0px;padding-left:0px;">
                 <img src="./assets/icons/{{line.avatar}}" width="40">
                 <b style="font-size: smaller;" ng-if='line.name'> {{line.name}}</b>
               </div>
-              <div class="col-sm-10" ng-class="{'message-text' : {{line.class != 'joined' && line.class != 'status'}}}">
+              <div class="col-sm-10" ng-class="{'message-text' : {{line.class != 'joined' && line.class != 'status'}}, 'my-answer-text' : {{myAvatar == line.avatar}}}">
                 {{line.msg}}
               </div>
             </div>
