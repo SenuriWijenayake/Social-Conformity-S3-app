@@ -154,8 +154,16 @@
         <div class="minimize">
         </div>
         <div class="textarea" id="text-area">
-          <div ng-repeat="line in history" class="chat-messages" ng-class="{'last-line':$last}">
-            <b ng-if='line.name'> {{line.name}} : </b> {{line.msg}}
+          <div ng-repeat="line in history" class="chat-messages" ng-class="{'last-line':$last, 'joined' : {{line.class == 'joined'}}, 'status' : {{line.class == 'status'}}}">
+            <div class="row">
+              <div class="col-sm-1" style="margin-left:10px;">
+                <img src="./assets/icons/{{line.avatar}}" width="40">
+                <b style="font-size: smaller;" ng-if='line.name'> {{line.name}}</b>
+              </div>
+              <div class="col-sm-10" ng-class="{'message-text' : {{line.class != 'joined' && line.class != 'status'}}}">
+                {{line.msg}}
+              </div>
+            </div>
           </div>
         </div>
         <div class="inputarea">

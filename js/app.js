@@ -65,6 +65,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $window.sessionStorage.setItem('cues', user.cues);
         $window.sessionStorage.setItem('discussion', user.discussion);
         $window.sessionStorage.setItem('username', user.name);
+        $window.sessionStorage.setItem('gender', user.gender);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
 
@@ -84,6 +85,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.cues = $window.sessionStorage.getItem('cues');
   $scope.discussion = $window.sessionStorage.getItem('discussion');
   $scope.currentUsername = $window.sessionStorage.getItem('username');
+  $scope.gender = $window.sessionStorage.getItem('gender');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
 
   $scope.question = {};
@@ -91,6 +93,19 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.explained = false;
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
+  $scope.myAvatar = "c.png";
+
+  $(function(){
+      if($scope.cues == 'Yes'){
+        if ($scope.gender == 'female'){
+          $scope.myAvatar = 'female.png';
+        } else{
+          $scope.myAvatar = 'male.png';
+        }
+      } else {
+        $scope.myAvatar = 'c.png'
+      }
+  });
 
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
@@ -439,13 +454,15 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.history = [];
   var socket = io.connect('http://localhost:5000');
   socket.emit('new_connection', {
-    'username': $scope.currentUsername
+    'username': $scope.currentUsername,
+    'avatar' : $scope.myAvatar
   });
 
   //Sending the initial messages
   $timeout(function() {
     $scope.history.push({
       name: "QuizBot",
+      avatar: "qb.png",
       msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
@@ -457,6 +474,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $timeout(function() {
     $scope.history.push({
       name: "QuizBot",
+      avatar: "qb.png",
       msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."});
   }, 3000);
 
@@ -472,7 +490,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $scope.history.push({
       name: data.username,
-      msg: data.message
+      msg: data.message,
+      avatar : data.avatar
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -481,6 +500,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $timeout(function() {
       $scope.history.push({
         name: "QuizBot",
+        avatar: "qb.png",
         msg: "Type 'GO' to start the quiz."
       });
     }, 1500);
@@ -495,7 +515,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   socket.on('new_message', (data) => {
     $scope.history.push({
       name: data.username,
-      msg: data.message
+      msg: data.message,
+      class: data.class,
+      avatar : data.avatar
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -505,8 +527,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //When someone connected to the channel
   socket.on('connected', (data) => {
     $scope.history.push({
-      name: data.username,
-      msg: data.message
+      msg: data.message,
+      class: data.class
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -548,13 +570,15 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         if ($scope.userState == "ready") {
           $scope.history.push({
             name: $scope.currentUsername,
-            msg: $scope.message
+            msg: $scope.message,
+            avatar: $scope.myAvatar
           });
           $scope.go();
 
         } else {
           $scope.history.push({
             name: "QuizBot",
+            avatar: "qb.png",
             msg: "You have already started the quiz."
           });
         }
@@ -562,12 +586,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       } else if(handle == "done"){
           socket.emit('new_message', {
             'username': $scope.currentUsername,
-            'message': $scope.message
+            'message': $scope.message,
+            'avatar' : $scope.myAvatar
           });
 
           $timeout(function() {
             $scope.history.push({
               name: "QuizBot",
+              avatar: "qb.png",
               msg: "You may change your answer, confidence or explanation now."
             });
           }, 1000);
@@ -580,7 +606,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       } else {
         socket.emit('new_message', {
           'username': $scope.currentUsername,
-          'message': $scope.message
+          'message': $scope.message,
+          'avatar' : $scope.myAvatar
         });
         $timeout(function() {
           $scope.scrollAdjust();
