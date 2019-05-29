@@ -95,16 +95,16 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.count = 0;
   $scope.myAvatar = "c.png";
 
-  $(function(){
-      if($scope.cues == 'Yes'){
-        if ($scope.gender == 'female'){
-          $scope.myAvatar = 'female.png';
-        } else{
-          $scope.myAvatar = 'male.png';
-        }
+  $(function() {
+    if ($scope.cues == 'Yes') {
+      if ($scope.gender == 'female') {
+        $scope.myAvatar = 'female.png';
       } else {
-        $scope.myAvatar = 'c.png'
+        $scope.myAvatar = 'male.png';
       }
+    } else {
+      $scope.myAvatar = 'c.png'
+    }
   });
 
   $("input[type='range']").change(function() {
@@ -149,7 +149,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#image-container").css("display", "none");
     }
 
-    if($scope.discussion == 'No'){
+    if ($scope.discussion == 'No') {
       $("#question-area").css("display", "inline");
       $("#qBox").css("border", "solid red");
     }
@@ -165,7 +165,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       e.returnValue = dialogText;
 
       //Disconnect sockets if there are any
-      if($scope.discussion){
+      if ($scope.discussion) {
         socket.disconnect();
       }
       return dialogText;
@@ -373,23 +373,28 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
-      var data = {
-        userId: $scope.userId,
-        chats: JSON.parse(angular.toJson($scope.history))
-      };
+      if ($scope.discussion == 'Yes') {
+        var data = {
+          userId: $scope.userId,
+          chats: JSON.parse(angular.toJson($scope.history))
+        };
 
-      $http({
-        method: 'POST',
-        url: api + '/saveChats',
-        data: data,
-        type: JSON,
-      }).then(function(response) {
-          console.log("Chat messages saved successfully.");
-          $window.location.href = './big-five.html';
-        },
-        function(error) {
-          console.log("Error occured when saving the chat messages.");
-        });
+        $http({
+          method: 'POST',
+          url: api + '/saveChats',
+          data: data,
+          type: JSON,
+        }).then(function(response) {
+            console.log("Chat messages saved successfully.");
+            $window.location.href = './big-five.html';
+          },
+          function(error) {
+            console.log("Error occured when saving the chat messages.");
+          });
+      } else {
+        //No Discussion
+        $window.location.href = './big-five.html';
+      }
     } else {
       $scope.userId = $window.sessionStorage.getItem('userId');
       var data = {
@@ -455,7 +460,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   var socket = io.connect('http://localhost:5000');
   socket.emit('new_connection', {
     'username': $scope.currentUsername,
-    'avatar' : $scope.myAvatar
+    'avatar': $scope.myAvatar
   });
 
   //Sending the initial messages
@@ -475,7 +480,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."});
+      msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."
+    });
   }, 3000);
 
   $timeout(function() {
@@ -491,7 +497,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: data.username,
       msg: data.message,
-      avatar : data.avatar
+      avatar: data.avatar
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -517,7 +523,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       name: data.username,
       msg: data.message,
       class: data.class,
-      avatar : data.avatar
+      avatar: data.avatar
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -539,7 +545,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.go = function() {
     socket.emit('started', {
       'username': $scope.currentUsername,
-      'question' : $scope.question
+      'question': $scope.question
     });
 
     $("#question-area").css("display", "inline");
@@ -583,20 +589,20 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           });
         }
         $scope.message = "";
-      } else if(handle == "done"){
-          socket.emit('new_message', {
-            'username': $scope.currentUsername,
-            'message': $scope.message,
-            'avatar' : $scope.myAvatar
-          });
+      } else if (handle == "done") {
+        socket.emit('new_message', {
+          'username': $scope.currentUsername,
+          'message': $scope.message,
+          'avatar': $scope.myAvatar
+        });
 
-          $timeout(function() {
-            $scope.history.push({
-              name: "QuizBot",
-              avatar: "qb.png",
-              msg: "You may change your answer, confidence or explanation now."
-            });
-          }, 1000);
+        $timeout(function() {
+          $scope.history.push({
+            name: "QuizBot",
+            avatar: "qb.png",
+            msg: "You may change your answer, confidence or explanation now."
+          });
+        }, 1000);
 
         //Show change box
         $timeout(function() {
@@ -607,7 +613,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message,
-          'avatar' : $scope.myAvatar
+          'avatar': $scope.myAvatar
         });
         $timeout(function() {
           $scope.scrollAdjust();

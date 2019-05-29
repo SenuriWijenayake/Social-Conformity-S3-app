@@ -259,11 +259,13 @@ input[type=radio]+label>img {
 }
 
 .submit {
-  height: 35px;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  width: 50%;
+  width: 40%;
+  height: 43px;
+  background-color: #117A65;
+  font-size: 18px;
+  color: white;
+  border: 1px solid #117A65;
+  border-radius: 5px;
   margin-left: 25%;
   float: right;
 }
