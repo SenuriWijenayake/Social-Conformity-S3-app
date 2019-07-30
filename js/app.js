@@ -27,10 +27,22 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   });
 
   $scope.indexNext = function(user) {
-    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'letter' ? user.name : true) && (user.age >= 18)) {
       $("#index-next").attr('disabled', true);
       $("#index-next").css('background-color', 'grey');
       $("#index-instructions").css("display", "block");
+
+      //For initial condition, get the avatar
+      if (user.cues == 'letter'){
+        var api = 'https://ui-avatars.com/api/?name=';
+        //Get first name and last name of the user
+        var res = user.name.split(" ");
+        var firstName = res[0];
+        var lastName = res[res.length - 1];
+        var final = api + firstName + '+' + lastName + '&rounded=true&background=EBEDEF&color=000000&bold=true';
+        console.log(final);
+        $("#example_avatar").attr("src", final);
+      }
 
       $timeout(function() {
         $("#connection-pending").css("display", "block");
@@ -46,12 +58,11 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   }
 
   $scope.submitDetails = function(user) {
-    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
+
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.cues == 'letter' ? user.name : true) && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
 
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
-      user.name = "You";
-
       console.log(user);
 
       $http({
@@ -82,6 +93,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.userId = $window.sessionStorage.getItem('userId');
   $scope.cues = $window.sessionStorage.getItem('cues');
+  $scope.visibility = $window.sessionStorage.getItem('visibility');
   $scope.discussion = $window.sessionStorage.getItem('discussion');
   $scope.currentUsername = $window.sessionStorage.getItem('username');
   $scope.gender = $window.sessionStorage.getItem('gender');
@@ -368,7 +380,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 18) {
+    if ($scope.currentQIndex == 20) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -467,7 +479,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
+      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 20 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
 

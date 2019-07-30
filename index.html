@@ -41,7 +41,7 @@
                   <select required ng-model="user.cues" class="input-text">
                     <option value="">None</option>
                     <option value="avatar">Avatar</option>
-                    <option value="letter">Letter</option>
+                    <option value="letter">Initials</option>
                   </select>
                 </td>
               </tr>
@@ -69,9 +69,14 @@
               </tr>
 
               <!--For cues condition-->
-              <!-- <tr class="row" ng-show="user.cues == 'Yes'">
+              <tr class="row" ng-show="user.cues == 'letter'">
                 <td class="col-sm-6 right padding-adjust-labels" style="padding-top:25px;"> Your name: <span style="color:red;">*</span></td>
-                <td class="col-sm-6" style="padding-top: 25px;"> <input type="text" placeholder=" e.g. Amy" ng-model="user.name" class="input-text" style="padding-left:5px;"></td>
+                <td class="col-sm-6" style="padding-top: 25px;"> <input type="text" placeholder=" e.g. John Doe" ng-model="user.name" class="input-text" style="padding-left:5px;"></td>
+              </tr>
+
+              <!-- <tr class="row">
+                <td class="col-sm-6 right padding-adjust-labels" style="padding-top: 25px;"> Gender: <span style="color:red;">*</span> </td>
+                <td class="col-sm-6" style="padding-top: 25px;"> <input type="text" ng-model="user.gender" class="input-text" style="padding-left:5px;" required></td>
               </tr> -->
 
               <tr class="row">
@@ -136,14 +141,6 @@
               </div>
             </div>
 
-            <!-- <div class="row">
-              <div class="col-sm-8">
-                <button id="index-submit-button" class="submit-details" style="float:right;" ng-click="submitDetails(user)">Let's get started!</button>
-              </div>
-              <div class="col-sm-4">
-                <div id="index-loader" class="index-loader"></div>
-              </div>
-            </div> -->
           </form>
         </div>
       </div>
@@ -203,7 +200,11 @@
         </div>
 
         <div class="row" id="connection-success" style="display:none;">
-          <div class="col-sm-12 connecting-text">
+          <div class="col-sm-12 connecting-text" ng-show="user.cues == 'letter'">
+            Successfully connected with four other users! <br/>
+            You will be referred to as <img id="example_avatar" width="50"/>
+          </div>
+          <div class="col-sm-12 connecting-text" ng-show="user.cues == 'avatar'">
             Successfully connected with four other users!
           </div>
         </div>
