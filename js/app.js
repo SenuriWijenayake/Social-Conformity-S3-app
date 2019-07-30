@@ -27,7 +27,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   });
 
   $scope.indexNext = function(user) {
-    if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
       $("#index-next").attr('disabled', true);
       $("#index-next").css('background-color', 'grey');
       $("#index-instructions").css("display", "block");
@@ -46,14 +46,13 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   }
 
   $scope.submitDetails = function(user) {
-    if (user.cues && user.discussion && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'Yes' ? user.name : true) && (user.age >= 18)) {
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
 
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
+      user.name = "You";
 
-      if (!user.name) {
-        user.name = "User C";
-      }
+      console.log(user);
 
       $http({
         method: 'POST',
@@ -64,8 +63,8 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $window.sessionStorage.setItem('userId', response.data.id);
         $window.sessionStorage.setItem('cues', user.cues);
         $window.sessionStorage.setItem('discussion', user.discussion);
+        $window.sessionStorage.setItem('visibility', user.visibility);
         $window.sessionStorage.setItem('username', user.name);
-        $window.sessionStorage.setItem('gender', user.gender);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
 

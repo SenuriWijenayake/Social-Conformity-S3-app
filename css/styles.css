@@ -193,7 +193,7 @@ input[type=radio]+label>img {
 }
 
 .instruction {
-  margin-top: 20px;
+  margin-top: 14px;
   background: #D6EAF8;
   border-radius: 9px;
   padding: 6px;
@@ -309,7 +309,7 @@ input[type=radio]+label>img {
 }
 
 .index-submit {
-  margin-top: 17px;
+  margin-top: 26px;
   float: right;
   width: 60%;
   height: 43px;
