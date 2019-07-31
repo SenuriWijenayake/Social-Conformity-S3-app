@@ -29,6 +29,8 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   $scope.indexNext = function(user) {
     if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'letter' ? user.name : true) && (user.age >= 18)) {
       $("#index-next").attr('disabled', true);
+      $(".input-text").attr('disabled', true);
+      $(".radio-button").attr('disabled', true);
       $("#index-next").css('background-color', 'grey');
       $("#index-instructions").css("display", "block");
 
