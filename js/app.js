@@ -42,8 +42,10 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         var firstName = res[0];
         var lastName = res[res.length - 1];
         var final = api + firstName + '+' + lastName + '&rounded=true&background=EBEDEF&color=000000&bold=true';
-        console.log(final);
+        $scope.myAvatar = final;
         $("#example_avatar").attr("src", final);
+      } else {
+        $scope.myAvatar = '';
       }
 
       $timeout(function() {
