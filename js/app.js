@@ -45,8 +45,9 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $scope.myAvatar = final;
         $("#example_avatar").attr("src", final);
       } else {
-        $scope.myAvatar = '';
+        $scope.myAvatar = './assets/neutral.png';
       }
+      $window.sessionStorage.setItem('avatar', $scope.myAvatar);
 
       $timeout(function() {
         $("#connection-pending").css("display", "block");
@@ -67,7 +68,6 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
 
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
-      console.log(user);
 
       $http({
         method: 'POST',
@@ -79,7 +79,6 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $window.sessionStorage.setItem('cues', user.cues);
         $window.sessionStorage.setItem('discussion', user.discussion);
         $window.sessionStorage.setItem('visibility', user.visibility);
-        $window.sessionStorage.setItem('username', user.name);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
 
@@ -99,8 +98,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.cues = $window.sessionStorage.getItem('cues');
   $scope.visibility = $window.sessionStorage.getItem('visibility');
   $scope.discussion = $window.sessionStorage.getItem('discussion');
-  $scope.currentUsername = $window.sessionStorage.getItem('username');
-  $scope.gender = $window.sessionStorage.getItem('gender');
+  $scope.myAvatar = $window.sessionStorage.getItem('avatar');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
 
   $scope.question = {};
@@ -108,19 +106,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.explained = false;
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
-  $scope.myAvatar = "c.png";
-
-  $(function() {
-    if ($scope.cues == 'Yes') {
-      if ($scope.gender == 'female') {
-        $scope.myAvatar = 'female.png';
-      } else {
-        $scope.myAvatar = 'male.png';
-      }
-    } else {
-      $scope.myAvatar = 'c.png'
-    }
-  });
 
   $("input[type='range']").change(function() {
     $scope.sliderChanged = true;
@@ -239,63 +224,29 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }).then(function(response) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         $timeout(function() {
-          if ($scope.myAnswer.cues != "Yes") {
-            $scope.createControlFeedback(response.data.feedback);
-          } else {
-            $scope.avatarFeedback(response.data.feedback);
-          }
+          $scope.createFeedback(response.data.feedback);
         }, 3000);
 
       }, function(error) {
-        console.log("Error occured when loading the chart");
+        console.log("Error occured when loading the feedback");
       });
     }
   };
 
-  $scope.avatarFeedback = function(data) {
+  $scope.createFeedback = function(data){
     $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
-
-    $("#avatar_div").css("display", "block");
-
-    if ($scope.cues == 'No' && $scope.discussion == 'No') {
-      $timeout(function() {
-        $("#change-section-ncnd").css("display", "block");
-      }, 2000);
-    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
-      $timeout(function() {
-        $("#change-section-cnd").css("display", "block");
-      }, 2000);
-    } else {
-      // //Discussion conditions
-      // $timeout(function() {
-      //   $("#change-section").css("display", "block");
-      // }, 2000);
-    }
-
-  };
-
-  $scope.createControlFeedback = function(feedback) {
-    $scope.controlFeedback = feedback;
-    $("#loader").css("display", "none");
-    $("#loader-text").css("display", "none");
-
     $("#chart_div").css("display", "block");
 
-    if ($scope.cues == 'No' && $scope.discussion == 'No') {
-      $timeout(function() {
-        $("#change-section-ncnd").css("display", "block");
-      }, 2000);
-    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
-      $timeout(function() {
-        $("#change-section-cnd").css("display", "block");
-      }, 2000);
-    } else {
-      // $timeout(function() {
-      //   $("#change-section").css("display", "block");
-      // }, 2000);
-    }
+    $timeout(function() {
+      if ($scope.discussion == 'No'){
+        $("#change-section-nd").css("display", "block");
+      }
+      else{
+        $("#change-section").css("display", "block");
+      }
+    }, 2000);
   };
 
   $scope.yes = function() {
