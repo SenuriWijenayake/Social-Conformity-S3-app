@@ -103,7 +103,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.question = {};
   $scope.sliderChanged = false;
-  $scope.explained = false;
+  // $scope.explained = false;
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
 
@@ -111,25 +111,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
     $("#confidence-container").css("border", "none");
-    if ($scope.explained) {
-      $("#submit-button").css("display", "block");
-      $(".explanation-box").css("border-color", "grey");
-    } else {
-      $(".explanation-box").css("border", "2px solid red");
-      $(".explanation-box").focus();
-    }
-  });
-
-  $('.explanation-box').keyup(function() {
-    if ($scope.myAnswer.explanation != "") {
-      $scope.explained = true;
-      $(".explanation-box").css("border-color", "grey");
-    }
-    if ($scope.sliderChanged && $scope.myAnswer.explanation != "") {
-      $scope.explained = true;
-      $("#submit-button").css("display", "block");
-      $(".explanation-box").css("border-color", "grey");
-    }
+    $("#submit-button").css("display", "block");
+    $(".explanation-box").css("border-color", "grey");
   });
 
   //Setting question one
@@ -182,9 +165,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Show only when the answer is selected
   $scope.clicked = function() {
-    if (!$scope.explained) {
-      $(".explanation-box").focus();
-    }
     //Resetting the red line
     if ($scope.question.questionNumber < 0) {
       $("#qBox").css("border", "none");
@@ -201,11 +181,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.sliderChanged && $scope.myAnswer.explanation != "") {
       //Remove the button
       $("#submit-button").css("display", "none");
-      $(".explanation-box").css("border", "2px solid grey");
       //Disbling the input
       $("input[type=radio]").attr('disabled', true);
       $("input[type=range]").attr('disabled', true);
-      $(".explanation-box").attr('disabled', true);
       //Loader activated
       $("#loader").css("display", "block");
       $("#loader-text").css("display", "block");
@@ -258,38 +236,32 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Make the input enabled
     $("input[type=radio]").attr('disabled', false);
     $("input[type=range]").attr('disabled', false);
-    $(".explanation-box").attr('disabled', false);
 
     //Remove change section buttons
-    if ($scope.cues == 'No' && $scope.discussion == 'No') {
-      $("#change-section-ncnd").css("display", "none");
-    } else if ($scope.cues == 'Yes' && $scope.discussion == 'No') {
-      $("#change-section-cnd").css("display", "none");
-    } else {
+    if ($scope.discussion == 'No'){
+      $("#change-section-nd").css("display", "none");
+    }
+    else{
       $("#change-section").css("display", "none");
     }
 
     //Set the confidence to 50
     $scope.myAnswer.confidence = 50;
     $scope.sliderChanged = false;
-    $scope.explained = false;
 
-    $(".explanation-box").val("");
     $("#output").val("Not Specified");
     $("#output").css("color", "red");
   };
 
   $scope.update = function() {
 
-    if ($scope.sliderChanged && $scope.explained) {
+    if ($scope.sliderChanged) {
 
       //Remove the question area and chart area
       $("#question-area").css("display", "none");
       $("#chart-area").css("display", "none");
-      $("#avatar-area").css("display", "none");
 
-      $("#change-section-ncnd").css("display", "none");
-      $("#change-section-cnd").css("display", "none");
+      $("#change-section-nd").css("display", "none");
       $("#change-section").css("display", "none");
 
       //Disable the button
@@ -297,7 +269,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
-      $scope.myAnswer.explanation = $scope.myAnswer.explanation;
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
 
@@ -318,18 +289,15 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Remove the question area and chart area
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
-    $("#avatar-area").css("display", "none");
 
     $("#change-section").css("display", "none");
-    $("#change-section-ncnd").css("display", "none");
-    $("#change-section-cnd").css("display", "none");
+    $("#change-section-nd").css("display", "none");
 
     $scope.count = 0;
 
     //Make the input enabled and submit invisible
     $("input[type=radio]").attr('disabled', false);
     $("input[type=range]").attr('disabled', false);
-    $(".explanation-box").attr('disabled', false);
 
     $("#submit-button").css("display", "none");
     $("#confidence-container").css("display", "none");
@@ -377,14 +345,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         //Display the new question area and chart area
         $("#question-area").css("display", "block");
         $("#chart-area").css("display", "block");
-        $("#avatar-area").css("display", "block");
-        // $("#change-section").css("display", "block");
 
         $scope.myAnswer = {};
         $scope.sliderChanged = false;
         $scope.explained = false;
         $scope.myAnswer.confidence = 50;
-        $(".explanation-box").val("");
         $scope.question = response.data;
 
         if ($scope.question.img) {
@@ -396,11 +361,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#loader").css("display", "none");
         $("#loader-text").css("display", "none");
         $("#chart_div").css("display", "none");
-        $("#avatar_div").css("display", "none");
 
         $("#change-section").css("display", "none");
-        $("#change-section-ncnd").css("display", "none");
-        $("#change-section-cnd").css("display", "none");
+        $("#change-section-nd").css("display", "none");
 
         $("#submit-button").prop("disabled", false);
         $("#output").val("Not Specified");
