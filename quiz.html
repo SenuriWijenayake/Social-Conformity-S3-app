@@ -78,7 +78,7 @@
           <div class="row control-option-row" ng-repeat="option in feedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box">
               <img src="./assets/icons/new/{{option.avatar}}" width="45" ng-show='option.order != 1 && cues == "letter"'>
-              <img src="./assets/icons/new/neutral.png" width="45" ng-show='option.order != 1 && cues == "avatar">
+              <img src="./assets/icons/new/neutral.png" width="45" ng-show='option.order != 1 && cues == "avatar"'>
               <img src="{{myAvatar}}" width="45" ng-show='option.order == 1'>
             </div>
             <div class="col-sm-10 feedback-explanation-box">
@@ -86,6 +86,7 @@
               <!-- <div class="col-sm-12 explanation-area"><b>Explanation : </b>{{option.explanation}}</div> -->
             </div>
           </div>
+
           <div id="change-section-nd" style="margin-bottom: 50px;padding: 20px;margin-top: 20px;border: solid red;display:none;">
             <div class="row">
               <div id="descr" class="col-sm-12">
@@ -105,7 +106,6 @@
         <div id="loader-text" style="display: none;" class="loader-text">Getting answers of other participants.. Please wait.</div>
       </div>
 
-      <!-- Full length change section -->
       <div class="row">
         <div id="change-section" class="col-sm-12" style="display:none;" ng-class="{'change-area-no-discuss': (discussion == 'No'), 'change-area-discuss' : (discussion == 'Yes')}">
           <div id="descr">
@@ -127,8 +127,11 @@
           <div ng-repeat="line in history" class="chat-messages" ng-class="{'last-line':$last, 'joined' : {{line.class == 'joined'}}, 'status' : {{line.class == 'status'}}}">
             <div class="row">
               <div class="col-sm-1" style="margin-left:20px;padding-right:0px;padding-left:0px;text-align:center;">
-                <img src="./assets/icons/{{line.avatar}}" width="40">
-                <b style="font-size: smaller;" ng-if='line.name'> {{line.name}}</b>
+                <img src="./assets/icons/new/{{line.avatar}}" width="45" ng-show='line.name != currentUsername && line.name != "QuizBot" && cues == "letter"' style="margin-top:7px;">
+                <img src="{{myAvatar}}" width="45" ng-show='line.name == currentUsername && cues == "letter"' style="margin-top:7px;">
+
+                <img src="./assets/icons/new/{{line.avatar}}" width="40" ng-show='line.name == "QuizBot"'>
+                <b style="font-size: smaller;" ng-if='line.name && line.name == "QuizBot"'> {{line.name}}</b>
               </div>
               <div class="col-sm-10" ng-class="{'message-text' : {{line.class != 'joined' && line.class != 'status'}}, 'my-answer-text' : {{currentUsername == line.name}}}">
                 {{line.msg}}

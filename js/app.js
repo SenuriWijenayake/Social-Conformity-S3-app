@@ -47,7 +47,12 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
       } else {
         $scope.myAvatar = './assets/neutral.png';
       }
+
+      //Create username
+      var username = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+
       $window.sessionStorage.setItem('avatar', $scope.myAvatar);
+      $window.sessionStorage.setItem('username', username);
 
       $timeout(function() {
         $("#connection-pending").css("display", "block");
@@ -100,6 +105,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.discussion = $window.sessionStorage.getItem('discussion');
   $scope.myAvatar = $window.sessionStorage.getItem('avatar');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
+  $scope.currentUsername = $window.sessionStorage.getItem('username');
 
   $scope.question = {};
   $scope.sliderChanged = false;
