@@ -44,16 +44,16 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         var final = api + firstName + '+' + lastName + '&rounded=true&background=EBEDEF&color=000000&bold=true';
         $scope.myAvatar = final;
         $("#example_avatar").attr("src", final);
+
+        //Create username
+        var username = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+        $window.sessionStorage.setItem('username', username);
       } else {
         $scope.myAvatar = './assets/neutral.png';
       }
 
-      //Create username
-      var username = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
-
       $window.sessionStorage.setItem('avatar', $scope.myAvatar);
-      $window.sessionStorage.setItem('username', username);
-
+      
       $timeout(function() {
         $("#connection-pending").css("display", "block");
       }, 1500);
