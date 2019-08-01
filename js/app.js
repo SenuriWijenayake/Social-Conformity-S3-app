@@ -47,7 +47,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         //Create username
         var username = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
       } else {
-        $scope.myAvatar = './assets/neutral.png';
+        $scope.myAvatar = './assets/icons/new/neutral.png';
         var username = "You";
       }
       $window.sessionStorage.setItem('username', username);
