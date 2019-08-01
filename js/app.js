@@ -198,6 +198,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.userId = $scope.userId;
       $scope.myAnswer.cues = $scope.cues;
       $scope.myAnswer.discussion = $scope.discussion;
+      $scope.myAnswer.visibility = $scope.visibility;
+      $scope.myAnswer.myAvatar = $scope.myAvatar;
+      $scope.myAnswer.username = $scope.currentUsername;
 
       $http({
         method: 'POST',
@@ -362,7 +365,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 20) {
+    if ($scope.currentQIndex == 16) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
