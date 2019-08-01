@@ -35,7 +35,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
       $("#index-instructions").css("display", "block");
 
       //For initial condition, get the avatar
-      if (user.cues == 'letter'){
+      if (user.cues == 'letter') {
         var api = 'https://ui-avatars.com/api/?name=';
         //Get first name and last name of the user
         var res = user.name.split(" ");
@@ -183,7 +183,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.submitAnswer = function() {
-    if ($scope.sliderChanged && $scope.myAnswer.explanation != "") {
+    if ($scope.sliderChanged) {
       //Remove the button
       $("#submit-button").css("display", "none");
       //Disbling the input
@@ -216,17 +216,32 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }
   };
 
-  $scope.createFeedback = function(data){
+  $scope.createFeedback = function(data) {
     $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
     $("#chart_div").css("display", "block");
 
     $timeout(function() {
-      if ($scope.discussion == 'No'){
+      if ($scope.discussion == 'No') {
         $("#change-section-nd").css("display", "block");
+      } else {
+        $("#change-section").css("display", "block");
       }
-      else{
+    }, 2000);
+  };
+
+  $scope.createPublicFeedback = function(data){
+    $scope.updatedFeedback = data;
+    $("#loader-updated").css("display", "none");
+    $("#loader-text-updated").css("display", "none");
+    $("#updated_div").css("display", "block");
+
+    //Add a next button
+    $timeout(function() {
+      if ($scope.discussion == 'No') {
+        $("#change-section-nd").css("display", "block");
+      } else {
         $("#change-section").css("display", "block");
       }
     }, 2000);
@@ -234,7 +249,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.yes = function() {
 
-    $scope.count = 1;
+    if ($scope.visibility == 'No') {
+      $scope.count = 1;
+    } else {
+      $scope.count = 2;
+    }
 
     $("#submit-button").css("display", "none");
 
@@ -243,10 +262,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("input[type=range]").attr('disabled', false);
 
     //Remove change section buttons
-    if ($scope.discussion == 'No'){
+    if ($scope.discussion == 'No') {
       $("#change-section-nd").css("display", "none");
-    }
-    else{
+    } else {
       $("#change-section").css("display", "none");
     }
 
@@ -287,6 +305,42 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, function(error) {
         console.log("Error occured when updating the answers");
       });
+    }
+  };
+
+  $scope.showUpdatedAnswers = function() {
+    //get updated feedback and display it in the relevant area
+    if ($scope.sliderChanged) {
+      //Remove the button
+      $("#submit-button").css("display", "none");
+      //Disbling the input
+      $("input[type=radio]").attr('disabled', true);
+      $("input[type=range]").attr('disabled', true);
+      //Loader activated
+      $("#loader-updated").css("display", "block");
+      $("#loader-text-updated").css("display", "block");
+
+      $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
+      $scope.myAnswer.questionId = $scope.question.questionNumber;
+      $scope.myAnswer.userId = $scope.userId;
+      $scope.myAnswer.cues = $scope.cues;
+      $scope.myAnswer.discussion = $scope.discussion;
+
+      $http({
+        method: 'POST',
+        url: api + '/publicFeedback',
+        data: $scope.myAnswer,
+        type: JSON,
+      }).then(function(response) {
+        $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+        $timeout(function() {
+          $scope.createPublicFeedback(response.data.feedback);
+        }, 3000);
+
+      }, function(error) {
+        console.log("Error occured when loading the feedback");
+      });
+
     }
   };
 
