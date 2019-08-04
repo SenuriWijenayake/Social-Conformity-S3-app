@@ -234,22 +234,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }, 2000);
   };
 
-  $scope.createPublicFeedback = function(data){
-    $scope.updatedFeedback = data;
-    $("#loader-updated").css("display", "none");
-    $("#loader-text-updated").css("display", "none");
-    $("#updated_div").css("display", "block");
-
-    //Add a next button
-    $timeout(function() {
-      if ($scope.discussion == 'No') {
-        $("#change-section-nd").css("display", "block");
-      } else {
-        $("#change-section").css("display", "block");
-      }
-    }, 2000);
-  };
-
   $scope.yes = function() {
 
     if ($scope.visibility == 'No') {
@@ -280,23 +264,35 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.update = function() {
-
-    if ($scope.sliderChanged) {
-
-      //Remove the question area and chart area
-      $("#question-area").css("display", "none");
-      $("#chart-area").css("display", "none");
-
-      $("#change-section-nd").css("display", "none");
-      $("#change-section").css("display", "none");
-
-      //Disable the button
-      $("#submit-button").attr("disabled", "disabled");
-      $("#confidence-container").css("display", "none");
+    if ($scope.sliderChanged)
 
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
+      //Private situation
+      if ($scope.visibility == 'No'){
+        //Remove the question area and chart area
+        $("#question-area").css("display", "none");
+        $("#chart-area").css("display", "none");
+
+        $("#change-section-nd").css("display", "none");
+        $("#change-section").css("display", "none");
+
+        //Disable the button
+        $("#submit-button").attr("disabled", "disabled");
+        $("#confidence-container").css("display", "none");
+
+      } else {
+        //Keep the text disabled
+        $("#submit-button").css("display", "none");
+        $("#chart-area").css("display", "none");
+        //Disbling the input
+        $("input[type=radio]").attr('disabled', true);
+        $("input[type=range]").attr('disabled', true);
+        //Loader activated
+        $("#loader-updated").css("display", "block");
+        $("#loader-text-updated").css("display", "block");
+      }
 
       $http({
         method: 'POST',
@@ -304,47 +300,66 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         data: $scope.myAnswer,
         type: JSON,
       }).then(function(response) {
-        $scope.next();
+        //If private go to the next question
+        if ($scope.visibility == 'No'){
+          $scope.next();
+        } else {
+          $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+          $scope.showUpdatedAnswers();
+        }
+
       }, function(error) {
         console.log("Error occured when updating the answers");
       });
-    }
-  };
+    };
+
 
   $scope.showUpdatedAnswers = function() {
-    //get updated feedback and display it in the relevant area
-    if ($scope.sliderChanged) {
-      //Remove the button
-      $("#submit-button").css("display", "none");
-      //Disbling the input
-      $("input[type=radio]").attr('disabled', true);
-      $("input[type=range]").attr('disabled', true);
-      //Loader activated
-      $("#loader-updated").css("display", "block");
-      $("#loader-text-updated").css("display", "block");
-
-      $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
-      $scope.myAnswer.questionId = $scope.question.questionNumber;
-      $scope.myAnswer.userId = $scope.userId;
-      $scope.myAnswer.cues = $scope.cues;
-      $scope.myAnswer.discussion = $scope.discussion;
-
-      $http({
-        method: 'POST',
-        url: api + '/publicFeedback',
-        data: $scope.myAnswer,
-        type: JSON,
-      }).then(function(response) {
-        $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-        $timeout(function() {
-          $scope.createPublicFeedback(response.data.feedback);
-        }, 3000);
-
-      }, function(error) {
-        console.log("Error occured when loading the feedback");
-      });
-
-    }
+    var data = [
+  {
+    "avatar": "https://ui-avatars.com/api/?name=ry+h&rounded=true&background=EBEDEF&color=000000&bold=true",
+    "answer": "United States of America",
+    "username": "RH",
+    "order": 1,
+    "hasChanged": true,
+    "newAnswer" : "United States of America"
+  },
+  {
+    "avatar": "b.png",
+    "answer": "Canada",
+    "order": 3,
+    "hasChanged": true,
+    "newAnswer": "United States of America"
+  },
+  {
+    "avatar": "d.png",
+    "answer": "Canada",
+    "order": 4,
+    "hasChanged": false,
+    "newAnswer": "Canada"
+  },
+  {
+    "avatar": "e.png",
+    "answer": "Canada",
+    "order": 5,
+    "hasChanged": false,
+    "newAnswer": "Canada"
+  },
+  {
+    "avatar": "a.png",
+    "answer": "Canada",
+    "hasChanged": false,
+    "order": 2,
+    "newAnswer": "Canada"
+  }
+];
+    $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+    //Remove the loader
+    $("#loader-updated").css("display", "none");
+    $("#loader-text-updated").css("display", "none");
+    $("#updated_div").css("display", "block");
+    //Show feedback
+    $scope.updatedFeedback = data;
   };
 
   $scope.next = function() {

@@ -7,6 +7,10 @@
   border-radius: 4px;
 }
 
+.text-red{
+  color: red;
+}
+
 .my-answer-text{
   background: #D4EFDF ! important;
 }
