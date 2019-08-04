@@ -289,19 +289,71 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         data: data,
         type: JSON,
       }).then(function(response) {
-
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
         //Remove the loader
-        $("#loader-updated").css("display", "none");
-        $("#loader-text-updated").css("display", "none");
-        $("#updated_div").css("display", "block");
-        //Show feedback
-        $scope.updatedFeedback = response.data;
+        $timeout(function() {
+          $("#loader-updated").css("display", "none");
+          $("#loader-text-updated").css("display", "none");
+          $("#updated_div").css("display", "block");
+          //Show feedback
+          $scope.updatedFeedback = response.data;
+          if ($scope.discussion == 'Yes'){
+            $("#updated-change-section").css("display", "block");
+          } else{
+            $("#updated-change-section-nd").css("display", "block");
+          }
+        }, 3000);
 
       }, function(error) {
         console.log("Error occured when updating the answers");
       });
     }
+  };
+
+  $scope.showPublicFeedback = function(){
+    //Show feedback without updating the answer
+    $("#change-section-nd").css("display", "none");
+    $("#change-section").css("display", "none");
+    $("#chart-area").css("display", "none");
+    //Disbling the input
+    $("input[type=radio]").attr('disabled', true);
+    $("input[type=range]").attr('disabled', true);
+    //Loader activated
+    $("#loader-updated").css("display", "block");
+    $("#loader-text-updated").css("display", "block");
+
+    $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
+    $scope.myAnswer.questionId = $scope.question.questionNumber;
+    $scope.myAnswer.userId = $scope.userId;
+    $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+
+    var data = {"answer" : $scope.myAnswer, "feedback" : $scope.feedback};
+
+    //HTTP Call
+    $http({
+      method: 'POST',
+      url: api + '/showFeedbackOnly',
+      data: data,
+      type: JSON,
+    }).then(function(response) {
+      $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+      //Remove the loader
+      $timeout(function() {
+        $("#loader-updated").css("display", "none");
+        $("#loader-text-updated").css("display", "none");
+        $("#updated_div").css("display", "block");
+        //Show feedback
+        $scope.updatedFeedback = response.data;
+        if ($scope.discussion == 'Yes'){
+          $("#updated-change-section").css("display", "block");
+        } else{
+          $("#updated-change-section-nd").css("display", "block");
+        }
+      }, 3000);
+
+    }, function(error) {
+      console.log("Error occured when updating the answers");
+    });
   };
 
   //For private condition
@@ -339,9 +391,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Remove the question area and chart area
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
+    $("#updated_div").css("display", "none");
 
     $("#change-section").css("display", "none");
     $("#change-section-nd").css("display", "none");
+    $("#updated-change-section").css("display", "none");
+    $("#updated-change-section-nd").css("display", "none");
 
     $scope.count = 0;
 

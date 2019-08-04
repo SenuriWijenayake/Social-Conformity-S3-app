@@ -97,7 +97,7 @@
                 <input type="button" value="Yes" class="yes-button" ng-click="yes()" />
               </div>
               <div class="col-sm-6">
-                <input type="button" value="No, next question" class="no-button" ng-click="next()" />
+                <input type="button" value="No, next question" class="no-button" ng-click="((visibility == 'No') ? next() : showPublicFeedback())" />
               </div>
             </div>
           </div>
@@ -122,13 +122,14 @@
             </div>
           </div>
 
-          <div id="change-section-nd" style="margin-bottom: 50px;padding: 20px;margin-top: 20px;border: solid red;display:none;">
+          <div id="updated-change-section-nd" style="margin-bottom: 50px;padding: 20px;margin-top: 20px;border: solid red;display:none;">
             <div class="row">
               <div class="col-sm-12">
-                <input type="button" value="No, next question" class="no-button" ng-click="next()" />
+                <input type="button" value="Next question" class="updated-no-button" ng-click="next()" />
               </div>
             </div>
           </div>
+
         </div>
         <div id="loader-updated" style="display: none;" class="loader"></div>
         <div id="loader-text-updated" style="display: none;" class="loader-text">Getting the final answers of other participants.. Please wait.</div>
@@ -143,8 +144,15 @@
             <input type="button" value="Yes" class="yes-button" ng-click="yes()" />
           </div>
           <div class="col-sm-6">
-            <input type="button" value="No, next question" class="no-button" ng-click="next()" />
+            <input type="button" value="No, next question" class="no-button" ng-click="((visibility == 'No') ? next() : showPublicFeedback())" />
           </div>
+        </div>
+      </div>
+
+      <!-- Change section for public conditions -->
+      <div class="row">
+        <div id="updated-change-section" class="col-sm-12" style="display:none;" ng-class="{'change-area-no-discuss': (discussion == 'No'), 'change-area-discuss' : (discussion == 'Yes')}">
+          <input type="button" value="Next question" class="updated-no-button" ng-click="next()" />
         </div>
       </div>
 
