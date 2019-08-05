@@ -174,7 +174,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //Show only when the answer is selected
   $scope.clicked = function() {
     //Resetting the red line
-    if ($scope.question.questionNumber < 0) {
+    if ($scope.currentQIndex == 1) {
       $("#qBox").css("border", "none");
       $("#confidence-container").css("display", "block");
       if (!$scope.sliderChanged) {
