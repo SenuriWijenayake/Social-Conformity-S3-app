@@ -204,6 +204,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.visibility = $scope.visibility;
       $scope.myAnswer.myAvatar = $scope.myAvatar;
       $scope.myAnswer.username = $scope.currentUsername;
+      $scope.myAnswer.set = $scope.set;
 
       $http({
         method: 'POST',
@@ -282,6 +283,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
       $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
+      $scope.myAnswer.set = $scope.set;
 
       var data = {"answer" : $scope.myAnswer, "feedback" : $scope.feedback};
 
