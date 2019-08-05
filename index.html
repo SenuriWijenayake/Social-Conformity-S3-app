@@ -24,9 +24,9 @@
     <div class="index-main-container">
       <div class="col-sm-6 index-container">
         <div class="welcome-text">Welcome!</div>
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
           Thank you for agreeing to participate in this study. <br>
-          To get started, enter your details in the form given below. <br>
+          To get started, enter your details in the form given below.
           All fields are required (marked in <span style="color:red;">*</span>).
           <br>
         </div>
@@ -34,6 +34,17 @@
         <div class="question-container">
           <form>
             <table style="width:100%;">
+
+              <tr class="row">
+                <td class="col-sm-6 right padding-adjust-labels"> Set (to be selected by the researcher):<span style="color:red;">*</span></td>
+                <td class="col-sm-6" style="padding-top: 10px;">
+                  <select required ng-model="user.set" class="input-text">
+                    <option value="">None</option>
+                    <option value="1">Set 1</option>
+                    <option value="2">Set 2</option>
+                  </select>
+                </td>
+              </tr>
 
               <tr class="row">
                 <td class="col-sm-6 right padding-adjust-labels"> Cues (to be selected by the researcher):<span style="color:red;">*</span></td>
