@@ -311,7 +311,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.showPublicFeedback = function(){
-    //Show feedback without updating the answer
+    //Show feedback without updating the answer as there is no change
     $("#change-section-nd").css("display", "none");
     $("#change-section").css("display", "none");
     $("#chart-area").css("display", "none");
