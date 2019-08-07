@@ -255,10 +255,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'avatar' : "qb.png"
         });
         $("#change-section").css("display", "block");
-      }, 60000);
+      }, 4000);
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 60500);
+      }, 4500);
     }
   };
 
@@ -418,6 +418,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.next = function() {
+    $scope.history.push({
+      name: "QuizBot",
+      msg: "Moving to the next question.",
+      avatar : "qb.png"
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 500);
     //Remove the question area and chart area
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
