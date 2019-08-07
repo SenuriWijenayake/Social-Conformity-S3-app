@@ -166,7 +166,6 @@
                 <img src="./assets/icons/new/{{line.avatar}}" width="45" ng-show='line.name != currentUsername && line.name != "QuizBot" && cues == "letter"' style="margin-top:7px;">
                 <img src="{{myAvatar}}" width="45" ng-show='line.name == currentUsername && cues == "letter"' style="margin-top:7px;">
                 <img src="./assets/icons/new/neutral.png" width="45" ng-show='line.name != "QuizBot" && cues == "avatar" && line.class != "joined"' style="margin-top:7px;">
-
                 <img src="./assets/icons/new/{{line.avatar}}" width="40" ng-show='line.name == "QuizBot"'>
                 <b style="font-size: smaller;" ng-if='line.name && line.name == "QuizBot"'> {{line.name}}</b>
               </div>

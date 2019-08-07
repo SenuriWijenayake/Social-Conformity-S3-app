@@ -634,7 +634,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message,
-          'avatar': $scope.myAvatar
+          'avatar': $scope.myAvatar,
+          'realUser' : true
         });
 
         $timeout(function() {
