@@ -48,7 +48,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         var username = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
       } else {
         $scope.myAvatar = './assets/icons/new/neutral.png';
-        var username = "You";
+        var username = "User";
       }
       $window.sessionStorage.setItem('username', username);
       $window.sessionStorage.setItem('avatar', $scope.myAvatar);
@@ -423,6 +423,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       msg: "Moving to the next question.",
       avatar : "qb.png"
     });
+
+    socket.emit('new_question', {
+      'username': "QuizBot",
+      'avatar': "qb.png",
+      'msg' : "Moving to the next question."
+    });
+
     $timeout(function() {
       $scope.scrollAdjust();
     }, 500);
