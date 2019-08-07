@@ -229,13 +229,37 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#loader-text").css("display", "none");
     $("#chart_div").css("display", "block");
 
-    $timeout(function() {
-      if ($scope.discussion == 'No') {
+    if ($scope.discussion == 'No') {
+      $timeout(function() {
         $("#change-section-nd").css("display", "block");
-      } else {
+      }, 2000);
+    } else {
+      $timeout(function() {
+        //Tell them to discuss
+        socket.emit('new_message', {
+          'message': "You have two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer.",
+          'username': "QuizBot",
+          'avatar' : "qb.png"
+        });
+      }, 2000);
+
+      $timeout(function() {
+        $scope.scrollAdjust();
+      }, 2500);
+
+      $timeout(function() {
+        //Ask them to change now
+        socket.emit('new_message', {
+          'message': "Time is up! You may change your answer if you want now.",
+          'username': "QuizBot",
+          'avatar' : "qb.png"
+        });
         $("#change-section").css("display", "block");
-      }
-    }, 2000);
+      }, 60000);
+      $timeout(function() {
+        $scope.scrollAdjust();
+      }, 60500);
+    }
   };
 
   $scope.yes = function() {
@@ -655,7 +679,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message,
-          'avatar': $scope.myAvatar
+          'avatar': $scope.myAvatar,
+          'realUser' : true
         });
         $timeout(function() {
           $scope.scrollAdjust();
