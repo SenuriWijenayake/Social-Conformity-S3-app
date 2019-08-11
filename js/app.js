@@ -255,10 +255,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'avatar' : "qb.png"
         });
         $("#change-section").css("display", "block");
-      }, 60000);
+      }, 4000);
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 65000);
+      }, 5000);
     }
   };
 
@@ -418,21 +418,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.next = function() {
-    $scope.history.push({
-      name: "QuizBot",
-      msg: "Moving to the next question.",
-      avatar : "qb.png"
-    });
 
-    socket.emit('new_question', {
-      'username': "QuizBot",
-      'avatar': "qb.png",
-      'msg' : "Moving to the next question."
-    });
-
-    $timeout(function() {
-      $scope.scrollAdjust();
-    }, 500);
     //Remove the question area and chart area
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
@@ -493,6 +479,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         type: JSON,
       }).then(function(response) {
 
+        socket.emit('new_question', {
+          'message': 'Moving to the next question..',
+          'username': 'QuizBot',
+          'avatar' : 'qb.png',
+          'info' : response.data
+        });
         //Display the new question area and chart area
         $("#question-area").css("display", "block");
         $("#chart-area").css("display", "block");
@@ -599,6 +591,19 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //When you receive a new broadcast message
   socket.on('new_message', (data) => {
+    $scope.history.push({
+      name: data.username,
+      msg: data.message,
+      class: data.class,
+      avatar: data.avatar
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 500);
+  });
+
+  //On next question
+  socket.on('new_question', (data) => {
     $scope.history.push({
       name: data.username,
       msg: data.message,
