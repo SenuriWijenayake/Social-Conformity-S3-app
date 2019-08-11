@@ -73,8 +73,8 @@
       </div>
 
       <div class="col-sm-6 chartdiv" id="chart-area">
-        <div id="chart_div" style="display:none;margin-left: 10%;margin-top:3%;">
-          <div style="font-weight:bold;margin-bottom:2%;">Results of the group to this question (your answer is highlighted)..</div>
+        <div id="chart_div" style="display:none;margin-left: 10%;margin-top:2%;">
+          <div style="font-weight:bold;margin-bottom:1%;">Results of the group to this question (your answer is highlighted)..</div>
           <div class="row control-option-row" ng-repeat="option in feedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box">
               <img src="./assets/icons/new/{{option.avatar}}" width="40" ng-if='option.order != 1 && cues == "letter"'>
@@ -109,8 +109,8 @@
 
       <!-- Visibility public section -->
       <div class="col-sm-6 chartdiv" id="updated-answers-section">
-        <div id="updated_div" style="display:none;margin-left: 10%;margin-top:3%;">
-          <div style="font-weight:bold;margin-bottom:2%;">Final answers of the group to this question (changes highlighted in red).</div>
+        <div id="updated_div" style="display:none;margin-left: 10%;margin-top:2%;">
+          <div style="font-weight:bold;margin-bottom:1%;">Final answers of the group to this question (changes highlighted in red).</div>
           <div class="row control-option-row" ng-repeat="option in updatedFeedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1), 'text-red' : (option.hasChanged == true)}">
             <div class="col-sm-2 option-box">
               <img src="./assets/icons/new/{{option.avatar}}" width="40" ng-if='option.order != 1 && cues == "letter"'>
