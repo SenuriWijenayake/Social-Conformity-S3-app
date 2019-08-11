@@ -47,34 +47,34 @@
               </tr>
 
               <tr class="row">
-                <td class="col-sm-6 right padding-adjust-labels"> Cues (to be selected by the researcher):<span style="color:red;">*</span></td>
+                <td class="col-sm-6 right padding-adjust-labels"> C (to be selected by the researcher):<span style="color:red;">*</span></td>
                 <td class="col-sm-6" style="padding-top: 10px;">
                   <select required ng-model="user.cues" class="input-text">
                     <option value="">None</option>
-                    <option value="avatar">Avatar</option>
-                    <option value="letter">Initials</option>
+                    <option value="avatar">A</option>
+                    <option value="letter">I</option>
                   </select>
                 </td>
               </tr>
 
               <tr class="row">
-                <td class="col-sm-6 right padding-adjust-labels"> Discussion (to be selected by the researcher):<span style="color:red;">*</span></td>
+                <td class="col-sm-6 right padding-adjust-labels"> D (to be selected by the researcher):<span style="color:red;">*</span></td>
                 <td class="col-sm-6" style="padding-top: 10px;">
                   <select required ng-model="user.discussion" class="input-text">
                     <option value="">None</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="Yes">Y</option>
+                    <option value="No">N</option>
                   </select>
                 </td>
               </tr>
 
               <tr class="row">
-                <td class="col-sm-6 right padding-adjust-labels"> Visibility (to be selected by the researcher):<span style="color:red;">*</span></td>
+                <td class="col-sm-6 right padding-adjust-labels"> V (to be selected by the researcher):<span style="color:red;">*</span></td>
                 <td class="col-sm-6" style="padding-top: 10px;">
                   <select required ng-model="user.visibility" class="input-text">
                     <option value="">None</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="Yes">Y</option>
+                    <option value="No">N</option>
                   </select>
                 </td>
               </tr>
@@ -93,25 +93,31 @@
               <tr class="row">
                 <td class="col-sm-6 right padding-adjust-labels"> Gender: <span style="color:red;">*</span> </td>
                 <td class="col-sm-6 padding-adjust-radio">
-                  <input id="female" type="radio" name="user.gender" ng-model="user.gender" value="female" class="radio-button" required> <label for="female" class="gender-label">Female</label>
+                  <input id="female" type="radio" name="user.gender" ng-model="user.gender" value="female" class="radio-button" required> <label for="female" class="gender-label">Woman</label>
                 </td>
               </tr>
               <tr class="row">
                 <td class="col-sm-6 right"></td>
                 <td class="col-sm-6">
-                  <input id="male" type="radio" name="user.gender" ng-model="user.gender" value="male" class="radio-button"> <label for="male" class="gender-label">Male</label>
+                  <input id="male" type="radio" name="user.gender" ng-model="user.gender" value="male" class="radio-button"> <label for="male" class="gender-label">Man</label>
                 </td>
               </tr>
               <tr class="row">
                 <td class="col-sm-6 right"></td>
                 <td class="col-sm-6">
-                  <input id="not-specified" type="radio" name="user.gender" ng-model="user.gender" value="not-specified" class="radio-button"> <label for="not-specified" class="gender-label"> Prefer not to say </label>
+                  <input id="male" type="radio" name="user.gender" ng-model="user.gender" value="non-binary" class="radio-button"> <label for="non-binary" class="gender-label">Non-binary</label>
                 </td>
               </tr>
               <tr class="row">
                 <td class="col-sm-6 right"></td>
                 <td class="col-sm-6">
-                  <input type="radio" id="gender-specified" name="user.gender" ng-model="user.gender" value="specified" class="radio-button"> <label for="gender-specified" class="specify-label"> Prefer to specify: </label>
+                  <input id="not-specified" type="radio" name="user.gender" ng-model="user.gender" value="not-specified" class="radio-button"> <label for="not-specified" class="gender-label"> Prefer not to disclose </label>
+                </td>
+              </tr>
+              <tr class="row">
+                <td class="col-sm-6 right"></td>
+                <td class="col-sm-6">
+                  <input type="radio" id="gender-specified" name="user.gender" ng-model="user.gender" value="specified" class="radio-button"> <label for="gender-specified" class="specify-label"> Prefer to self-describe: </label>
                   <input type="text" id="gender-text" ng-model="user.genderSpecified" class="specify-text" ng-required="user.gender == specified ? true : false">
                 </td>
               </tr>

@@ -255,10 +255,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'avatar' : "qb.png"
         });
         $("#change-section").css("display", "block");
-      }, 4000);
+      }, 60000);
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 4500);
+      }, 65000);
     }
   };
 
