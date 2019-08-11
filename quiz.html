@@ -77,9 +77,10 @@
           <div style="font-weight:bold;margin-bottom:2%;">Results of the group to this question (your answer is highlighted)..</div>
           <div class="row control-option-row" ng-repeat="option in feedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1)}">
             <div class="col-sm-2 option-box">
-              <img src="./assets/icons/new/{{option.avatar}}" width="45" ng-if='option.order != 1 && cues == "letter"'>
-              <img src="./assets/icons/new/neutral.png" width="45" ng-if='option.order != 1 && cues == "avatar"'>
-              <img src="{{myAvatar}}" width="45" ng-if='option.order == 1'>
+              <img src="./assets/icons/new/{{option.avatar}}" width="40" ng-if='option.order != 1 && cues == "letter"'>
+              <img src="./assets/icons/new/neutral.png" width="40" ng-if='option.order != 1 && cues == "avatar"'>
+              <img src="{{myAvatar}}" width="40" ng-if='option.order == 1'>
+              <div style="font-size: 13px; font-weight:bold;margin-top: -4px;">{{option.username}}</div>
             </div>
             <div class="col-sm-10 feedback-explanation-box">
               <div class="col-sm-12" style="padding: 3px;font-size: 23px;">{{option.answer}}</div>
@@ -112,9 +113,10 @@
           <div style="font-weight:bold;margin-bottom:2%;">Final answers of the group to this question (changes highlighted in red).</div>
           <div class="row control-option-row" ng-repeat="option in updatedFeedback | orderBy : 'order'" ng-class="{'my-answer': (option.order == 1), 'text-red' : (option.hasChanged == true)}">
             <div class="col-sm-2 option-box">
-              <img src="./assets/icons/new/{{option.avatar}}" width="45" ng-if='option.order != 1 && cues == "letter"'>
-              <img src="./assets/icons/new/neutral.png" width="45" ng-if='option.order != 1 && cues == "avatar"'>
-              <img src="{{myAvatar}}" width="45" ng-if='option.order == 1'>
+              <img src="./assets/icons/new/{{option.avatar}}" width="40" ng-if='option.order != 1 && cues == "letter"'>
+              <img src="./assets/icons/new/neutral.png" width="40" ng-if='option.order != 1 && cues == "avatar"'>
+              <img src="{{myAvatar}}" width="40" ng-if='option.order == 1'>
+              <div style="font-size: 13px; font-weight:bold;margin-top: -4px;">{{option.username}}</div>
             </div>
             <div class="col-sm-10 feedback-explanation-box">
               <div class="col-sm-12" style="padding: 3px;font-size: 23px;">{{option.newAnswer}}</div>
