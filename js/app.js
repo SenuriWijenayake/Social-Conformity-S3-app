@@ -675,6 +675,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         }
         $scope.message = "";
       } else if (handle == "done") {
+        
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message,
