@@ -7,6 +7,18 @@
   border-radius: 4px;
 }
 
+.progress-section{
+  margin-top: 4%;
+  margin-left: 25%;
+  display: none;
+}
+
+.tick{
+  margin-left: 28%;
+  margin-top: 9%;
+  display: none;
+}
+
 .updated-no-button{
   width: 70%;
   float: left;
@@ -629,7 +641,7 @@ body {
   animation: spin 2s linear infinite;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 16%;
+  margin-top: 7%;
 }
 
 /* Safari */

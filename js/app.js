@@ -122,6 +122,17 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $(".explanation-box").css("border-color", "grey");
   });
 
+  function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+    }
+    return a;
+  };
+
   //Setting question one
   $http({
     method: 'POST',
@@ -195,6 +206,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       //Loader activated
       $("#loader").css("display", "block");
       $("#loader-text").css("display", "block");
+      $("#progress-bar").css("display", "block");
 
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
@@ -213,20 +225,62 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         type: JSON,
       }).then(function(response) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-        $timeout(function() {
-          $scope.createFeedback(response.data.feedback);
-        }, 3000);
-
+        $scope.showTicks(response, false);
       }, function(error) {
         console.log("Error occured when loading the feedback");
       });
     }
   };
 
+  $scope.showTicks = function (response, isUpdate){
+    //Random ticks visible
+    var ticks;
+    if (isUpdate){
+      ticks = shuffle(["tick-5", "tick-6", "tick-7", "tick-8"]);
+    } else {
+      ticks = shuffle(["tick-1", "tick-2", "tick-3", "tick-4"]);
+    }
+    var randomTimes = [$scope.randomTime(3000, 10000), $scope.randomTime(3000, 10000), $scope.randomTime(3000, 10000), $scope.randomTime(3000, 10000)].sort();
+
+    $timeout(function() {
+      $("#" + ticks[0]).css("display", "block");
+    }, randomTimes[0]);
+
+    $timeout(function() {
+      $("#" + ticks[1]).css("display", "block");
+    }, randomTimes[1]);
+
+    $timeout(function() {
+      $("#" + ticks[2]).css("display", "block");
+    }, randomTimes[2]);
+
+    $timeout(function() {
+      $("#" + ticks[3]).css("display", "block");
+    }, randomTimes[3]);
+
+    if (isUpdate){
+      $timeout(function() {
+        $scope.createUpdatedFeedback(response);
+        $(".tick").css("display", "none");
+      }, randomTimes[3] + 2000);
+    } else {
+      $timeout(function() {
+        $scope.createFeedback(response.data.feedback);
+        $(".tick").css("display", "none");
+      }, randomTimes[3] + 2000);
+    }
+  };
+
+  $scope.randomTime = function(min, max) {
+    var random = Math.floor(Math.random() * (+max - +min)) + +min;
+    return random;
+  };
+
   $scope.createFeedback = function(data) {
     $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
+    $("#progress-bar").css("display", "none");
     $("#chart_div").css("display", "block");
 
     if ($scope.discussion == 'No') {
@@ -239,7 +293,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_message', {
           'message': "You have two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer.",
           'username': "QuizBot",
-          'avatar' : "qb.png"
+          'avatar': "qb.png"
         });
       }, 2000);
 
@@ -252,7 +306,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_message', {
           'message': "Time is up! You may change your answer if you want now.",
           'username': "QuizBot",
-          'avatar' : "qb.png"
+          'avatar': "qb.png"
         });
         $("#change-section").css("display", "block");
       }, 4000);
@@ -302,6 +356,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       //Loader activated
       $("#loader-updated").css("display", "block");
       $("#loader-text-updated").css("display", "block");
+      $("#progress-bar-updated").css("display", "block");
 
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
@@ -309,7 +364,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
       $scope.myAnswer.set = $scope.set;
 
-      var data = {"answer" : $scope.myAnswer, "feedback" : $scope.feedback};
+      var data = {
+        "answer": $scope.myAnswer,
+        "feedback": $scope.feedback
+      };
 
       //HTTP Call
       $http({
@@ -319,19 +377,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         type: JSON,
       }).then(function(response) {
         $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-        //Remove the loader
-        $timeout(function() {
-          $("#loader-updated").css("display", "none");
-          $("#loader-text-updated").css("display", "none");
-          $("#updated_div").css("display", "block");
-          //Show feedback
-          $scope.updatedFeedback = response.data;
-          if ($scope.discussion == 'Yes'){
-            $("#updated-change-section").css("display", "block");
-          } else{
-            $("#updated-change-section-nd").css("display", "block");
-          }
-        }, 3000);
+        $scope.showTicks(response, true);
 
       }, function(error) {
         console.log("Error occured when updating the answers");
@@ -339,7 +385,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }
   };
 
-  $scope.showPublicFeedback = function(){
+  $scope.showPublicFeedback = function() {
+
     //Show feedback without updating the answer as there is no change
     $("#change-section-nd").css("display", "none");
     $("#change-section").css("display", "none");
@@ -350,6 +397,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     //Loader activated
     $("#loader-updated").css("display", "block");
     $("#loader-text-updated").css("display", "block");
+    $("#progress-bar-updated").css("display", "block");
 
     $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
     $scope.myAnswer.questionId = $scope.question.questionNumber;
@@ -357,7 +405,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
     $scope.myAnswer.set = $scope.set;
 
-    var data = {"answer" : $scope.myAnswer, "feedback" : $scope.feedback};
+    var data = {
+      "answer": $scope.myAnswer,
+      "feedback": $scope.feedback
+    };
 
     //HTTP Call
     $http({
@@ -367,23 +418,24 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       type: JSON,
     }).then(function(response) {
       $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-      //Remove the loader
-      $timeout(function() {
-        $("#loader-updated").css("display", "none");
-        $("#loader-text-updated").css("display", "none");
-        $("#updated_div").css("display", "block");
-        //Show feedback
-        $scope.updatedFeedback = response.data;
-        if ($scope.discussion == 'Yes'){
-          $("#updated-change-section").css("display", "block");
-        } else{
-          $("#updated-change-section-nd").css("display", "block");
-        }
-      }, 3000);
-
+      $scope.showTicks(response, true);
     }, function(error) {
       console.log("Error occured when updating the answers");
     });
+  };
+
+  $scope.createUpdatedFeedback = function (response){
+    $("#loader-updated").css("display", "none");
+    $("#loader-text-updated").css("display", "none");
+    $("#progress-bar-updated").css("display", "none");
+    $("#updated_div").css("display", "block");
+    //Show feedback
+    $scope.updatedFeedback = response.data;
+    if ($scope.discussion == 'Yes') {
+      $("#updated-change-section").css("display", "block");
+    } else {
+      $("#updated-change-section-nd").css("display", "block");
+    }
   };
 
   //For private condition
@@ -482,8 +534,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         socket.emit('new_question', {
           'message': 'Moving to the next question..',
           'username': 'QuizBot',
-          'avatar' : 'qb.png',
-          'info' : response.data
+          'avatar': 'qb.png',
+          'info': response.data
         });
         //Display the new question area and chart area
         $("#question-area").css("display", "block");
@@ -680,7 +732,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'username': $scope.currentUsername,
           'message': $scope.message,
           'avatar': $scope.myAvatar,
-          'realUser' : true
+          'realUser': true
         });
 
         $timeout(function() {
@@ -701,7 +753,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'username': $scope.currentUsername,
           'message': $scope.message,
           'avatar': $scope.myAvatar,
-          'realUser' : true
+          'realUser': true
         });
         $timeout(function() {
           $scope.scrollAdjust();
