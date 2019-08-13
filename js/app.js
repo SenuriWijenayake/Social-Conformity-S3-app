@@ -439,7 +439,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 16) {
+    if ($scope.currentQIndex == 18) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -540,7 +540,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 20 multilple-choice questions. You will be asked to answer each of them, with four other participants."
+      msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
 
@@ -675,7 +675,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         }
         $scope.message = "";
       } else if (handle == "done") {
-        
+
         socket.emit('new_message', {
           'username': $scope.currentUsername,
           'message': $scope.message,
