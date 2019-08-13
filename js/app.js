@@ -546,7 +546,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }).then(function(response) {
 
         socket.emit('new_question', {
-          'message': 'Moving to the next question..',
+          'message': 'Moving to question ' + ++$scope.currentQIndex + '/18.',
           'username': 'QuizBot',
           'avatar': 'qb.png',
           'info': response.data
