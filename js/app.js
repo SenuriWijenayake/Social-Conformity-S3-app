@@ -208,6 +208,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#loader-text").css("display", "block");
       $("#progress-bar").css("display", "block");
 
+      //Disable chat box
+      $("#chat-text").attr("disabled", true);
+      $(".send-button").css("background-color", "grey");
+      $(".send-button").css("border", "1px solid grey");
+
       $scope.myAnswer.answerId = parseInt($scope.myAnswer.answerId);
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
@@ -288,36 +293,45 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#change-section-nd").css("display", "block");
       }, 2000);
     } else {
+      //Enable the chat box
+      $("#chat-text").attr("disabled", false);
+      $(".send-button").css("background-color", "#117A65");
+      $(".send-button").css("border", "1px solid #117A65");
+
       $timeout(function() {
-        //Tell them to discuss
         socket.emit('new_message', {
           'message': "You have two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
-      }, 2000);
+      }, 1000);
 
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 2500);
+      }, 1500);
 
       $timeout(function() {
         //Ask them to change now
-        socket.emit('new_message', {
+        socket.emit('time_up', {
           'message': "Time is up! You may change your answer if you want now.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
+
         $("#change-section").css("display", "block");
-      }, 4000);
+        //Disable the chat till next discussion
+        $("#chat-text").attr("disabled", true);
+        $(".send-button").css("background-color", "grey");
+        $(".send-button").css("border", "1px solid grey");
+
+      }, 10000);
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 5000);
+      }, 10500);
     }
   };
 
   $scope.yes = function() {
-
     if ($scope.visibility == 'No') {
       $scope.count = 1;
     } else {
@@ -537,6 +551,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'avatar': 'qb.png',
           'info': response.data
         });
+        //Disable the chat till next discussion
+        $("#chat-text").attr("disabled", true);
+        $(".send-button").css("background-color", "grey");
+        $(".send-button").css("border", "1px solid grey");
+
         //Display the new question area and chart area
         $("#question-area").css("display", "block");
         $("#chart-area").css("display", "block");
@@ -654,6 +673,19 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }, 500);
   });
 
+  //When you receive a new broadcast message
+  socket.on('time_up', (data) => {
+    $scope.history.push({
+      name: data.username,
+      msg: data.message,
+      class: data.class,
+      avatar: data.avatar
+    });
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 500);
+  });
+
   //On next question
   socket.on('new_question', (data) => {
     $scope.history.push({
@@ -687,6 +719,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
+
+    //Disable chat box
+    $("#chat-text").attr("disabled", true);
+    $(".send-button").css("background-color", "grey");
+    $(".send-button").css("border", "1px solid grey");
 
     $scope.userState = "started"; //Started the quiz
   };
