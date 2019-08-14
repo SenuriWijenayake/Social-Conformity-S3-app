@@ -228,7 +228,8 @@
                 <b style="font-size: smaller;" ng-if='line.name != "QuizBot" && cues != "letter"'> {{line.name}}</b>
               </div>
               <div class="col-sm-10" ng-class="{'message-text' : {{line.class != 'joined' && line.class != 'status'}}, 'my-answer-text' : {{currentUsername == line.name}}}">
-                {{line.msg}}
+                {{line.msg}}<br/>
+                <div ng-if="line.class != 'joined' && line.class != 'status'" class="timestamp">{{line.timestamp}}</div>
               </div>
             </div>
           </div>

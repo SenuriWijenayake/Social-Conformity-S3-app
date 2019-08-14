@@ -7,6 +7,13 @@
   border-radius: 4px;
 }
 
+.timestamp{
+  font-size: 10px;
+  text-align: right;
+  padding: 3px;
+  margin-top: 21px;
+}
+
 .progress-section{
   margin-top: 4%;
   margin-left: 25%;
