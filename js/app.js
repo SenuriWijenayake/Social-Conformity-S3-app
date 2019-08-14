@@ -107,6 +107,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.set = $window.sessionStorage.getItem('set');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
   $scope.currentUsername = $window.sessionStorage.getItem('username');
+  $scope.IsUpdated = false;
 
   $scope.question = {};
   $scope.sliderChanged = false;
@@ -115,11 +116,19 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.count = 0;
 
   $("input[type='range']").change(function() {
+
+    if ($scope.IsUpdated) {
+      $scope.myAnswer.selectedUpdatedConf = $scope.getTimestamp();
+    } else {
+      $scope.myAnswer.selectedConf = $scope.getTimestamp();
+    }
+
     $scope.sliderChanged = true;
     $("#output").css("color", "green");
     $("#confidence-container").css("border", "none");
     $("#submit-button").css("display", "block");
     $(".explanation-box").css("border-color", "grey");
+
   });
 
   function shuffle(a) {
@@ -154,6 +163,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.discussion == 'No') {
       $("#question-area").css("display", "inline");
       $("#qBox").css("border", "solid red");
+      $scope.myAnswer.sawQuestion = $scope.getTimestamp();
     }
 
   }, function(error) {
@@ -184,6 +194,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Show only when the answer is selected
   $scope.clicked = function() {
+    if ($scope.IsUpdated) {
+      $scope.myAnswer.selectedUpdatedOption = $scope.getTimestamp();
+    } else {
+      $scope.myAnswer.selectedOption = $scope.getTimestamp();
+    }
+
     //Resetting the red line
     if ($scope.currentQIndex == 1) {
       $("#qBox").css("border", "none");
@@ -198,6 +214,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.submitAnswer = function() {
     if ($scope.sliderChanged) {
+      $scope.myAnswer.clickedSubmit = $scope.getTimestamp();
       //Remove the button
       $("#submit-button").css("display", "none");
       //Disbling the input
@@ -237,10 +254,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }
   };
 
-  $scope.showTicks = function (response, isUpdate){
+  $scope.showTicks = function(response, isUpdate) {
     //Random ticks visible
     var ticks;
-    if (isUpdate){
+    if (isUpdate) {
       ticks = shuffle(["tick-5", "tick-6", "tick-7", "tick-8"]);
     } else {
       ticks = shuffle(["tick-1", "tick-2", "tick-3", "tick-4"]);
@@ -263,7 +280,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#" + ticks[3]).css("display", "block");
     }, randomTimes[3]);
 
-    if (isUpdate){
+    if (isUpdate) {
       $timeout(function() {
         $scope.createUpdatedFeedback(response);
         $(".tick").css("display", "none");
@@ -282,6 +299,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.createFeedback = function(data) {
+    $scope.myAnswer.sawFeedback = $scope.getTimestamp();
     $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
@@ -332,6 +350,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.yes = function() {
+    $scope.IsUpdated = true;
+    $scope.myAnswer.selectedYes = $scope.getTimestamp();
     if ($scope.visibility == 'No') {
       $scope.count = 1;
     } else {
@@ -361,6 +381,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.updateAndShowAnswers = function() {
     if ($scope.sliderChanged) {
+      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestamp();
       //Keep the text disabled
       $("#submit-button").css("display", "none");
       $("#chart-area").css("display", "none");
@@ -400,7 +421,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.showPublicFeedback = function() {
-
+    
+    $scope.myAnswer.selectedNo = $scope.getTimestamp();
     //Show feedback without updating the answer as there is no change
     $("#change-section-nd").css("display", "none");
     $("#change-section").css("display", "none");
@@ -438,12 +460,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     });
   };
 
-  $scope.createUpdatedFeedback = function (response){
+  $scope.createUpdatedFeedback = function(response) {
     $("#loader-updated").css("display", "none");
     $("#loader-text-updated").css("display", "none");
     $("#progress-bar-updated").css("display", "none");
     $("#updated_div").css("display", "block");
     //Show feedback
+    $scope.myAnswer.sawUpdatedFeedback = $scope.getTimestamp();
     $scope.updatedFeedback = response.data;
     if ($scope.discussion == 'Yes') {
       $("#updated-change-section").css("display", "block");
@@ -455,6 +478,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //For private condition
   $scope.update = function() {
     if ($scope.sliderChanged) {
+      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestamp();
       //Remove the question area and chart area
       $("#question-area").css("display", "none");
       $("#chart-area").css("display", "none");
@@ -485,6 +509,20 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.next = function() {
 
+    $scope.myAnswer.selectedNext = $scope.getTimestamp();
+
+    $http({
+      method: 'POST',
+      url: api + '/updateAnswerWithEvents',
+      data: $scope.myAnswer,
+      type: JSON,
+    }).then(function(response) {
+      $scope.IsUpdated = false;
+      console.log("Saved answer events!");
+    }, function(error) {
+      console.log("Error occured while saving answer events");
+    });
+
     //Remove the question area and chart area
     $("#question-area").css("display", "none");
     $("#chart-area").css("display", "none");
@@ -505,7 +543,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 2) {
+    if ($scope.currentQIndex == 18) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -565,6 +603,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $scope.explained = false;
         $scope.myAnswer.confidence = 50;
         $scope.question = response.data;
+        $scope.myAnswer.sawQuestion = $scope.getTimestamp();
 
         if ($scope.question.img) {
           $("#image-container").css("display", "inline");
@@ -597,6 +636,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     element.scrollTop = element.scrollHeight;
   };
 
+  //Function to get timestamp
+  $scope.getTimestamp = function() {
+    var dt = new Date();
+    dt.setHours(dt.getHours() + 10);
+    return dt.toUTCString();
+  };
+
+
   //Connecting the client to the socket
   $scope.userState = 'ready';
   $scope.history = [];
@@ -605,13 +652,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     'username': $scope.currentUsername,
     'avatar': $scope.myAvatar
   });
-
-  //Function to get timestamp
-  $scope.getTimestamp = function() {
-    var dt = new Date();
-    dt.setHours(dt.getHours() + 10);
-    return dt.toUTCString();
-  };
 
   $timeout(function() {
     $scope.history.push({
@@ -733,6 +773,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
+    $scope.myAnswer.sawQuestion = $scope.getTimestamp();
 
     //Disable chat box
     $("#chat-text").attr("disabled", true);
