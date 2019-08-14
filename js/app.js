@@ -350,6 +350,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.yes = function() {
+
+    socket.emit('making_changes', {
+      'message': 'Participant is making a change to the answer. Please wait while they complete. You will be taken to the next question upon completion.',
+      'username': 'QuizBot',
+      'avatar': 'qb.png'
+    });
+
     $scope.IsUpdated = true;
     $scope.myAnswer.selectedYes = $scope.getTimestamp();
     if ($scope.visibility == 'No') {
@@ -421,7 +428,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.showPublicFeedback = function() {
-    
+
     $scope.myAnswer.selectedNo = $scope.getTimestamp();
     //Show feedback without updating the answer as there is no change
     $("#change-section-nd").css("display", "none");
@@ -582,7 +589,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         data: data,
         type: JSON,
       }).then(function(response) {
-
         socket.emit('new_question', {
           'message': 'Moving to question ' + ($scope.currentQIndex + 1) + '/18.',
           'username': 'QuizBot',
@@ -712,13 +718,16 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //When you receive a new broadcast message
   socket.on('new_message', (data) => {
-    $scope.history.push({
-      name: data.username,
-      msg: data.message,
-      class: data.class,
-      timestamp: $scope.getTimestamp(),
-      avatar: data.avatar
-    });
+    $timeout(function() {
+      $scope.history.push({
+        name: data.username,
+        msg: data.message,
+        class: data.class,
+        timestamp: $scope.getTimestamp(),
+        avatar: data.avatar
+      });
+    }, 100);
+
     $timeout(function() {
       $scope.scrollAdjust();
     }, 500);
@@ -726,13 +735,16 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //When you receive a new broadcast message
   socket.on('time_up', (data) => {
-    $scope.history.push({
-      name: data.username,
-      msg: data.message,
-      class: data.class,
-      timestamp: $scope.getTimestamp(),
-      avatar: data.avatar
-    });
+    $timeout(function() {
+      $scope.history.push({
+        name: data.username,
+        msg: data.message,
+        class: data.class,
+        timestamp: $scope.getTimestamp(),
+        avatar: data.avatar
+      });
+    }, 100);
+
     $timeout(function() {
       $scope.scrollAdjust();
     }, 500);
@@ -740,13 +752,17 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //On next question
   socket.on('new_question', (data) => {
-    $scope.history.push({
-      name: data.username,
-      msg: data.message,
-      class: data.class,
-      timestamp: $scope.getTimestamp(),
-      avatar: data.avatar
-    });
+    $timeout(function() {
+      $scope.history.push({
+        name: data.username,
+        msg: data.message,
+        class: data.class,
+        timestamp: $scope.getTimestamp(),
+        avatar: data.avatar
+      });
+      $scope.scrollAdjust();
+    }, 100);
+
     $timeout(function() {
       $scope.scrollAdjust();
     }, 500);
