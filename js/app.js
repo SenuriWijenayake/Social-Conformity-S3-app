@@ -318,12 +318,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
       $timeout(function() {
         socket.emit('new_message', {
-          'message': "You have two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer.",
+          'message': "You have a maximum of five minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer. This chat will be disabled after five minutes. If you complete discussion before then, type 'DONE' to move forward.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
       }, 1000);
-
       $timeout(function() {
         $scope.scrollAdjust();
       }, 1500);
@@ -341,11 +340,10 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         $("#chat-text").attr("disabled", true);
         $(".send-button").css("background-color", "grey");
         $(".send-button").css("border", "1px solid grey");
-
-      }, 10000);
+      }, 300000);
       $timeout(function() {
         $scope.scrollAdjust();
-      }, 10500);
+      }, 300500);
     }
   };
 
@@ -733,7 +731,45 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     }, 500);
   });
 
-  //When you receive a new broadcast message
+  //When you receive a done signal
+  socket.on('done', (data) => {
+    $timeout(function() {
+      $scope.history.push({
+        name: data.username,
+        msg: data.message,
+        class: data.class,
+        timestamp: $scope.getTimestamp(),
+        avatar: data.avatar
+      });
+    }, 500);
+
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 600);
+
+    $timeout(function() {
+      $scope.history.push({
+        name: "QuizBot",
+        avatar: "qb.png",
+        timestamp: $scope.getTimestamp(),
+        msg: "You may change your answer and confidence now."
+      });
+    }, 1000);
+
+    $timeout(function() {
+      $scope.scrollAdjust();
+    }, 1100);
+    //Show change box
+    $timeout(function() {
+      $("#change-section").css("display", "block");
+      //Disable the chat till next discussion
+      $("#chat-text").attr("disabled", true);
+      $(".send-button").css("background-color", "grey");
+      $(".send-button").css("border", "1px solid grey");
+    }, 1500);
+  });
+
+  //When you receive the time up
   socket.on('time_up', (data) => {
     $timeout(function() {
       $scope.history.push({
@@ -837,27 +873,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         }
         $scope.message = "";
       } else if (handle == "done") {
-
-        socket.emit('new_message', {
+        socket.emit('done', {
           'username': $scope.currentUsername,
           'message': $scope.message,
           'avatar': $scope.myAvatar,
           'realUser': true
         });
-
-        $timeout(function() {
-          $scope.history.push({
-            name: "QuizBot",
-            avatar: "qb.png",
-            timestamp: $scope.getTimestamp(),
-            msg: "You may change your answer and confidence now."
-          });
-        }, 1000);
-
-        //Show change box
-        $timeout(function() {
-          $("#change-section").css("display", "block");
-        }, 1500);
 
       } else {
         socket.emit('new_message', {
