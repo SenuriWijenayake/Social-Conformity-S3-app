@@ -505,7 +505,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 18) {
+    if ($scope.currentQIndex == 2) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -546,7 +546,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }).then(function(response) {
 
         socket.emit('new_question', {
-          'message': 'Moving to question ' + ++$scope.currentQIndex + '/18.',
+          'message': 'Moving to question ' + ($scope.currentQIndex + 1) + '/18.',
           'username': 'QuizBot',
           'avatar': 'qb.png',
           'info': response.data
@@ -606,7 +606,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     'avatar': $scope.myAvatar
   });
 
-  //Sending the initial messages
+  //Function to get timestamp
   $scope.getTimestamp = function() {
     var dt = new Date();
     dt.setHours(dt.getHours() + 10);
