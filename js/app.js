@@ -355,7 +355,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, 1500);
       $timeout(function() {
         $("#timer").css("display", "block");
-      }, 1700);
+      }, 2000);
 
 
       $timeout(function() {
