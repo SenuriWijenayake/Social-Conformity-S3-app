@@ -115,8 +115,33 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.onbeforeunloadEnabled = true;
   $scope.count = 0;
 
-  $("input[type='range']").change(function() {
+  $scope.startTimer = function() {
+    // Set the date we're counting down to
+    var dt = new Date();
+    dt.setMinutes(dt.getMinutes() + 5);
+    var countDownDate = dt;
 
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+      // Get today's date and time
+      var now = new Date().getTime();
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Display the result in the element with id="demo"
+      document.getElementById("timer").innerHTML = "Time reamining : " + minutes + "m " + seconds + "s ";
+
+      // If the count down is finished, write some text
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("timer").innerHTML = "Time is up!";
+      }
+    }, 1000);
+  };
+
+  $("input[type='range']").change(function() {
     if ($scope.IsUpdated) {
       $scope.myAnswer.selectedUpdatedConf = $scope.getTimestamp();
     } else {
@@ -326,7 +351,12 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, 1000);
       $timeout(function() {
         $scope.scrollAdjust();
+        $scope.startTimer();
       }, 1500);
+      $timeout(function() {
+        $("#timer").css("display", "block");
+      }, 1700);
+
 
       $timeout(function() {
         //Ask them to change now
@@ -344,6 +374,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, 300000);
       $timeout(function() {
         $scope.scrollAdjust();
+        $("#timer").css("display", "none");
       }, 300500);
     }
   };
@@ -739,6 +770,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //When you receive a done signal
   socket.on('done', (data) => {
+    $("#timer").css("display", "none");
     $timeout(function() {
       $scope.history.push({
         name: data.username,
@@ -879,6 +911,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         }
         $scope.message = "";
       } else if (handle == "done") {
+
+        $("#timer").css("display", "none");
         socket.emit('done', {
           'username': $scope.currentUsername,
           'message': $scope.message,
