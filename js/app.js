@@ -172,12 +172,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Confirmation message before reload and back
   $window.onbeforeunload = function(e) {
+    console.log("here");
     if ($scope.onbeforeunloadEnabled) {
       var dialogText = 'You have unsaved changes. Are you sure you want to leave the site?';
       e.returnValue = dialogText;
 
       //Disconnect sockets if there are any
-      if ($scope.discussion) {
+      if ($scope.discussion == 'Yes') {
         socket.disconnect();
       }
       return dialogText;
@@ -548,7 +549,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#confidence-container").css("display", "none");
 
     //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 18) {
+    if ($scope.currentQIndex == 2) {
       //Disable the confirmation message
       $scope.onbeforeunloadEnabled = false;
       //Save chat messages to the database
@@ -566,6 +567,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         }).then(function(response) {
             console.log("Chat messages saved successfully.");
             $window.location.href = './big-five.html';
+            socket.emit('quiz_completed', {
+              'message': 'Quiz completed!',
+              'username': 'QuizBot',
+              'avatar': 'qb.png'
+            });
           },
           function(error) {
             console.log("Error occured when saving the chat messages.");
