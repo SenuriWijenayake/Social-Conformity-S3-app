@@ -313,7 +313,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $http({
       method: 'POST',
       url: api + '/updateAnswerWithFeedback',
-      data: data
+      data: data,
       type: JSON,
     }).then(function(response) {
       console.log("Feedback updated successfully");
