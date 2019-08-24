@@ -305,7 +305,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     var data = {
       "isUpdate": isUpdate,
-      "feedback": isUpdate ? response : response.data.feedback
+      "feedback": isUpdate ? response : response.data.feedback,
       "userId" : $scope.userId,
       "questionId" : $scope.questionId
     };
