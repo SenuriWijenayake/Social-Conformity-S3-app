@@ -27,7 +27,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
   });
 
   $scope.indexNext = function(user) {
-    if (user.cues && user.set && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'letter' ? user.name : true) && (user.age >= 18)) {
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.gender == 'specified' ? user.genderSpecified : true) && (user.cues == 'letter' ? user.name : true) && (user.age >= 18)) {
       $("#index-next").attr('disabled', true);
       $(".input-text").attr('disabled', true);
       $(".radio-button").attr('disabled', true);
@@ -68,7 +68,7 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
 
   $scope.submitDetails = function(user) {
 
-    if (user.cues && user.set && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.cues == 'letter' ? user.name : true) && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
+    if (user.cues && user.discussion && user.visibility && user.gender && user.age && user.education && user.field && (user.cues == 'letter' ? user.name : true) && (user.gender == 'specified' ? user.genderSpecified : true) && (user.age >= 18)) {
 
       $("#index-submit-button").attr('disabled', true);
       $("#index-loader").css("display", "block");
@@ -83,7 +83,6 @@ app.controller('HomeController', function($scope, $http, $window, $timeout) {
         $window.sessionStorage.setItem('cues', user.cues);
         $window.sessionStorage.setItem('discussion', user.discussion);
         $window.sessionStorage.setItem('visibility', user.visibility);
-        $window.sessionStorage.setItem('set', user.set);
         $window.sessionStorage.setItem('order', JSON.stringify(response.data.order));
         $window.location.href = './quiz.html';
 
@@ -104,7 +103,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.visibility = $window.sessionStorage.getItem('visibility');
   $scope.discussion = $window.sessionStorage.getItem('discussion');
   $scope.myAvatar = $window.sessionStorage.getItem('avatar');
-  $scope.set = $window.sessionStorage.getItem('set');
+  // $scope.set = $window.sessionStorage.getItem('set');
   $scope.order = JSON.parse($window.sessionStorage.getItem('order'));
   $scope.currentUsername = $window.sessionStorage.getItem('username');
   $scope.IsUpdated = false;
@@ -172,8 +171,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     method: 'POST',
     url: api + '/question',
     data: {
-      id: $scope.order[$scope.currentQIndex],
-      set: $scope.set
+      id: $scope.order[$scope.currentQIndex]
     },
     type: JSON,
   }).then(function(response) {
@@ -264,7 +262,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.visibility = $scope.visibility;
       $scope.myAnswer.myAvatar = $scope.myAvatar;
       $scope.myAnswer.username = $scope.currentUsername;
-      $scope.myAnswer.set = $scope.set;
 
       $http({
         method: 'POST',
@@ -434,7 +431,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.myAnswer.questionId = $scope.question.questionNumber;
       $scope.myAnswer.userId = $scope.userId;
       $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-      $scope.myAnswer.set = $scope.set;
 
       var data = {
         "answer": $scope.myAnswer,
@@ -476,7 +472,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.myAnswer.questionId = $scope.question.questionNumber;
     $scope.myAnswer.userId = $scope.userId;
     $scope.myAnswer.answerId = $scope.myAnswer.answerId.toString();
-    $scope.myAnswer.set = $scope.set;
+    // $scope.myAnswer.set = $scope.set;
 
     var data = {
       "answer": $scope.myAnswer,
@@ -614,8 +610,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     } else {
       $scope.userId = $window.sessionStorage.getItem('userId');
       var data = {
-        id: $scope.order[$scope.currentQIndex],
-        set: $scope.set
+        id: $scope.order[$scope.currentQIndex]
       };
 
       $http({
