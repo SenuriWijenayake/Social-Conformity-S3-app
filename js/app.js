@@ -571,7 +571,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       //Handling the ending of the quiz and directing to the big five questionnaire
-      if ($scope.currentQIndex == 2) {
+      if ($scope.currentQIndex == 18) {
         //Disable the confirmation message
         $scope.onbeforeunloadEnabled = false;
         //Save chat messages to the database
