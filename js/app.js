@@ -541,7 +541,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.next = function() {
-
+    alert("Here!");
     $scope.myAnswer.selectedNext = $scope.getTimestamp();
 
     $http({
@@ -551,119 +551,117 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       type: JSON,
     }).then(function(response) {
       $scope.IsUpdated = false;
+      //Remove the question area and chart area
+      $("#question-area").css("display", "none");
+      $("#chart-area").css("display", "none");
+      $("#updated_div").css("display", "none");
 
-    }, function(error) {
-      console.log("Error occured while saving answer events");
-    });
+      $("#change-section").css("display", "none");
+      $("#change-section-nd").css("display", "none");
+      $("#updated-change-section").css("display", "none");
+      $("#updated-change-section-nd").css("display", "none");
 
-    //Remove the question area and chart area
-    $("#question-area").css("display", "none");
-    $("#chart-area").css("display", "none");
-    $("#updated_div").css("display", "none");
+      $scope.count = 0;
 
-    $("#change-section").css("display", "none");
-    $("#change-section-nd").css("display", "none");
-    $("#updated-change-section").css("display", "none");
-    $("#updated-change-section-nd").css("display", "none");
+      //Make the input enabled and submit invisible
+      $("input[type=radio]").attr('disabled', false);
+      $("input[type=range]").attr('disabled', false);
 
-    $scope.count = 0;
+      $("#submit-button").css("display", "none");
+      $("#confidence-container").css("display", "none");
 
-    //Make the input enabled and submit invisible
-    $("input[type=radio]").attr('disabled', false);
-    $("input[type=range]").attr('disabled', false);
+      //Handling the ending of the quiz and directing to the big five questionnaire
+      if ($scope.currentQIndex == 2) {
+        //Disable the confirmation message
+        $scope.onbeforeunloadEnabled = false;
+        //Save chat messages to the database
+        if ($scope.discussion == 'Yes') {
+          var data = {
+            userId: $scope.userId,
+            chats: JSON.parse(angular.toJson($scope.history))
+          };
 
-    $("#submit-button").css("display", "none");
-    $("#confidence-container").css("display", "none");
-
-    //Handling the ending of the quiz and directing to the big five questionnaire
-    if ($scope.currentQIndex == 18) {
-      //Disable the confirmation message
-      $scope.onbeforeunloadEnabled = false;
-      //Save chat messages to the database
-      if ($scope.discussion == 'Yes') {
+          $http({
+            method: 'POST',
+            url: api + '/saveChats',
+            data: data,
+            type: JSON,
+          }).then(function(response) {
+              console.log("Chat messages saved successfully.");
+              $window.location.href = './big-five.html';
+              socket.emit('quiz_completed', {
+                'message': 'Quiz completed!',
+                'username': 'QuizBot',
+                'avatar': 'qb.png'
+              });
+            },
+            function(error) {
+              console.log("Error occured when saving the chat messages.");
+            });
+        } else {
+          //No Discussion
+          $window.location.href = './big-five.html';
+        }
+      } else {
+        $scope.userId = $window.sessionStorage.getItem('userId');
         var data = {
-          userId: $scope.userId,
-          chats: JSON.parse(angular.toJson($scope.history))
+          id: $scope.order[$scope.currentQIndex]
         };
 
         $http({
           method: 'POST',
-          url: api + '/saveChats',
+          url: api + '/question',
           data: data,
           type: JSON,
         }).then(function(response) {
-            console.log("Chat messages saved successfully.");
-            $window.location.href = './big-five.html';
-            socket.emit('quiz_completed', {
-              'message': 'Quiz completed!',
-              'username': 'QuizBot',
-              'avatar': 'qb.png'
-            });
-          },
-          function(error) {
-            console.log("Error occured when saving the chat messages.");
+          socket.emit('new_question', {
+            'message': 'Moving to question ' + ($scope.currentQIndex + 1) + '/18.',
+            'username': 'QuizBot',
+            'avatar': 'qb.png',
+            'info': response.data
           });
-      } else {
-        //No Discussion
-        $window.location.href = './big-five.html';
-      }
-    } else {
-      $scope.userId = $window.sessionStorage.getItem('userId');
-      var data = {
-        id: $scope.order[$scope.currentQIndex]
-      };
+          //Disable the chat till next discussion
+          $("#chat-text").attr("disabled", true);
+          $(".send-button").css("background-color", "grey");
+          $(".send-button").css("border", "1px solid grey");
 
-      $http({
-        method: 'POST',
-        url: api + '/question',
-        data: data,
-        type: JSON,
-      }).then(function(response) {
-        socket.emit('new_question', {
-          'message': 'Moving to question ' + ($scope.currentQIndex + 1) + '/18.',
-          'username': 'QuizBot',
-          'avatar': 'qb.png',
-          'info': response.data
+          //Display the new question area and chart area
+          $("#question-area").css("display", "block");
+          $("#chart-area").css("display", "block");
+
+          $scope.myAnswer = {};
+          $scope.sliderChanged = false;
+          $scope.explained = false;
+          $scope.myAnswer.confidence = 50;
+          $scope.question = response.data;
+          $scope.myAnswer.sawQuestion = $scope.getTimestamp();
+
+          if ($scope.question.img) {
+            $("#image-container").css("display", "inline");
+          } else {
+            $("#image-container").css("display", "none");
+          }
+
+          $("#loader").css("display", "none");
+          $("#loader-text").css("display", "none");
+          $("#chart_div").css("display", "none");
+
+          $("#change-section").css("display", "none");
+          $("#change-section-nd").css("display", "none");
+
+          $("#submit-button").prop("disabled", false);
+          $("#output").val("Not Specified");
+          $("#output").css("color", "red");
+
+          $scope.currentQIndex += 1;
+
+        }, function(error) {
+          console.log("Error occured when loading the question");
         });
-        //Disable the chat till next discussion
-        $("#chat-text").attr("disabled", true);
-        $(".send-button").css("background-color", "grey");
-        $(".send-button").css("border", "1px solid grey");
-
-        //Display the new question area and chart area
-        $("#question-area").css("display", "block");
-        $("#chart-area").css("display", "block");
-
-        $scope.myAnswer = {};
-        $scope.sliderChanged = false;
-        $scope.explained = false;
-        $scope.myAnswer.confidence = 50;
-        $scope.question = response.data;
-        $scope.myAnswer.sawQuestion = $scope.getTimestamp();
-
-        if ($scope.question.img) {
-          $("#image-container").css("display", "inline");
-        } else {
-          $("#image-container").css("display", "none");
-        }
-
-        $("#loader").css("display", "none");
-        $("#loader-text").css("display", "none");
-        $("#chart_div").css("display", "none");
-
-        $("#change-section").css("display", "none");
-        $("#change-section-nd").css("display", "none");
-
-        $("#submit-button").prop("disabled", false);
-        $("#output").val("Not Specified");
-        $("#output").css("color", "red");
-
-        $scope.currentQIndex += 1;
-
-      }, function(error) {
-        console.log("Error occured when loading the question");
-      });
-    }
+      }
+    }, function(error) {
+      console.log("Error occured while saving answer events");
+    });
   };
 
   //Function to adjust scrolling - not working
