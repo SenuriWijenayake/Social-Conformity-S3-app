@@ -683,7 +683,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //Connecting the client to the socket
   $scope.userState = 'ready';
   $scope.history = [];
-  var socket = io.connect('http://localhost:5000');
+  var socket = io.connect('https://mysterious-badlands-68636.herokuapp.com:5000');
   socket.emit('new_connection', {
     'username': $scope.currentUsername,
     'avatar': $scope.myAvatar
