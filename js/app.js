@@ -303,6 +303,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#" + ticks[3]).css("display", "block");
     }, randomTimes[3]);
 
+    //Updating the feedback
     var data = {
       "isUpdate": isUpdate,
       "feedback": isUpdate ? response : response.data.feedback,
