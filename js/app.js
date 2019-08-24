@@ -551,7 +551,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       type: JSON,
     }).then(function(response) {
       $scope.IsUpdated = false;
-      console.log("Saved answer events!");
+
     }, function(error) {
       console.log("Error occured while saving answer events");
     });
@@ -674,9 +674,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Function to get timestamp
   $scope.getTimestamp = function() {
-    var dt = new Date();
-    dt.setHours(dt.getHours() + 10);
-    return dt.toUTCString();
+    return Date.now();
   };
 
 
