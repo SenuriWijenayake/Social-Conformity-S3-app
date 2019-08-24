@@ -303,6 +303,24 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#" + ticks[3]).css("display", "block");
     }, randomTimes[3]);
 
+    var data = {
+      "isUpdate": isUpdate,
+      "feedback": isUpdate ? response : response.data.feedback
+      "userId" : $scope.userId,
+      "questionId" : $scope.questionId
+    };
+
+    $http({
+      method: 'POST',
+      url: api + '/updateAnswerWithFeedback',
+      data: data
+      type: JSON,
+    }).then(function(response) {
+      console.log("Feedback updated successfully");
+    }, function(error) {
+      console.log("Error occured when updating the answer with feeedback");
+    });
+
     if (isUpdate) {
       $timeout(function() {
         $scope.createUpdatedFeedback(response);
