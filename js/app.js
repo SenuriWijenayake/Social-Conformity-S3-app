@@ -195,7 +195,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Confirmation message before reload and back
   $window.onbeforeunload = function(e) {
-    console.log("here");
     if ($scope.onbeforeunloadEnabled) {
       var dialogText = 'You have unsaved changes. Are you sure you want to leave the site?';
       e.returnValue = dialogText;
@@ -541,7 +540,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.next = function() {
-    alert("Here!");
     $scope.myAnswer.selectedNext = $scope.getTimestamp();
 
     $http({
