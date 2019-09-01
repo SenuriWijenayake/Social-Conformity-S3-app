@@ -569,7 +569,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       //Handling the ending of the quiz and directing to the big five questionnaire
-      if ($scope.currentQIndex == 5) {
+      if ($scope.currentQIndex == 3) {
         //Disable the confirmation message
         $scope.onbeforeunloadEnabled = false;
         //Save chat messages to the database
@@ -807,7 +807,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     clearInterval(x);
     $("#timer").css("display", "none");
     document.getElementById("timer").innerHTML = "Time reamining : 2m 00s";
-    
+
     $timeout(function() {
       $scope.history.push({
         name: data.username,
