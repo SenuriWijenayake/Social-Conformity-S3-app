@@ -138,6 +138,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         //Stop the timer
         clearInterval(x);
         $("#timer").css("display", "none");
+        document.getElementById("timer").innerHTML = "Time reamining : 2m 00s";
 
         //Ask them to change now
         socket.emit('time_up', {
@@ -802,6 +803,11 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //When you receive the time up
   socket.on('time_up', (data) => {
+
+    clearInterval(x);
+    $("#timer").css("display", "none");
+    document.getElementById("timer").innerHTML = "Time reamining : 2m 00s";
+    
     $timeout(function() {
       $scope.history.push({
         name: data.username,
