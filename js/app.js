@@ -1,6 +1,6 @@
 var app = angular.module('app', []);
-var api = 'https://mysterious-badlands-68636.herokuapp.com';
-// var api = 'http://localhost:5000';
+// var api = 'https://mysterious-badlands-68636.herokuapp.com';
+var api = 'http://localhost:5000';
 
 app.controller('BigFiveController', function($scope, $http, $window) {
   $http({
@@ -348,6 +348,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $timeout(function() {
         $scope.scrollAdjust();
         $scope.startTimer();
+        socket.emit('start_timer', {});
       }, 1500);
       $timeout(function() {
         $("#timer").css("display", "block");
@@ -569,7 +570,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       //Handling the ending of the quiz and directing to the big five questionnaire
-      if ($scope.currentQIndex == 18) {
+      if ($scope.currentQIndex == 5) {
         //Disable the confirmation message
         $scope.onbeforeunloadEnabled = false;
         //Save chat messages to the database
@@ -677,7 +678,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //Connecting the client to the socket
   $scope.userState = 'ready';
   $scope.history = [];
-  var socket = io.connect('https://mysterious-badlands-68636.herokuapp.com');
+  // var socket = io.connect('https://mysterious-badlands-68636.herokuapp.com');
+  var socket = io.connect('http://localhost:5000');
   socket.emit('new_connection', {
     'username': $scope.currentUsername,
     'avatar': $scope.myAvatar
@@ -687,7 +689,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      timestamp: $scope.getTimestamp(),
+      timestamp: new Date().toUTCString(),
       msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
@@ -700,7 +702,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      timestamp: $scope.getTimestamp(),
+      timestamp: new Date().toUTCString(),
       msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."
     });
   }, 3000);
@@ -718,7 +720,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: data.username,
       msg: data.message,
-      timestamp: $scope.getTimestamp(),
+      timestamp: new Date().toUTCString(),
       avatar: data.avatar
     });
     $timeout(function() {
@@ -729,7 +731,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.history.push({
         name: "QuizBot",
         avatar: "qb.png",
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         msg: "Type 'GO' to start the quiz."
       });
     }, 1500);
@@ -747,7 +749,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         avatar: data.avatar
       });
     }, 100);
@@ -765,7 +767,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         avatar: data.avatar
       });
     }, 500);
@@ -778,7 +780,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.history.push({
         name: "QuizBot",
         avatar: "qb.png",
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         msg: "You may change your answer and confidence now."
       });
     }, 1000);
@@ -803,7 +805,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         avatar: data.avatar
       });
     }, 100);
@@ -820,7 +822,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: $scope.getTimestamp(),
+        timestamp: new Date().toUTCString(),
         avatar: data.avatar
       });
       $scope.scrollAdjust();
@@ -836,7 +838,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       msg: data.message,
       class: data.class,
-      timestamp: $scope.getTimestamp()
+      timestamp: new Date().toUTCString()
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -885,7 +887,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           $scope.history.push({
             name: $scope.currentUsername,
             msg: $scope.message,
-            timestamp: $scope.getTimestamp(),
+            timestamp: new Date().toUTCString(),
             avatar: $scope.myAvatar
           });
           $scope.go();
@@ -894,7 +896,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           $scope.history.push({
             name: "QuizBot",
             avatar: "qb.png",
-            timestamp: $scope.getTimestamp(),
+            timestamp: new Date().toUTCString(),
             msg: "You have already started the quiz."
           });
         }
