@@ -118,7 +118,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   $scope.startTimer = function() {
     // Set the date we're counting down to
     var dt = new Date();
-    dt.setMinutes(dt.getMinutes() + 5);
+    dt.setMinutes(dt.getMinutes() + 2);
     var countDownDate = dt;
 
     // Update the count down every 1 second
@@ -135,8 +135,25 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
       // If the count down is finished, write some text
       if (distance < 0) {
+        //Stop the timer
         clearInterval(x);
-        document.getElementById("timer").innerHTML = "Time is up!";
+        $("#timer").css("display", "none");
+
+        //Ask them to change now
+        socket.emit('time_up', {
+          'message': "Time is up! You may change your answer if you want now.",
+          'username': "QuizBot",
+          'avatar': "qb.png"
+        });
+        $("#change-section").css("display", "block");
+        //Disable the chat till next discussion
+        $("#chat-text").attr("disabled", true);
+        $(".send-button").css("background-color", "grey");
+        $(".send-button").css("border", "1px solid grey");
+
+        $timeout(function() {
+          $scope.scrollAdjust();
+        }, 500);
       }
     }, 500);
   };
@@ -341,7 +358,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
       $timeout(function() {
         socket.emit('new_message', {
-          'message': "You have a maximum of five minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer. This chat will be disabled after five minutes. If you complete discussion before then, type 'DONE' to move forward.",
+          'message': "You have a maximum of two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer. This chat will be disabled after two minutes. If you complete discussion before then, type 'DONE' to move forward.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
@@ -354,26 +371,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $timeout(function() {
         $("#timer").css("display", "block");
       }, 1600);
-
-
-      $timeout(function() {
-        //Ask them to change now
-        socket.emit('time_up', {
-          'message': "Time is up! You may change your answer if you want now.",
-          'username': "QuizBot",
-          'avatar': "qb.png"
-        });
-
-        $("#change-section").css("display", "block");
-        //Disable the chat till next discussion
-        $("#chat-text").attr("disabled", true);
-        $(".send-button").css("background-color", "grey");
-        $(".send-button").css("border", "1px solid grey");
-      }, 300000);
-      $timeout(function() {
-        $scope.scrollAdjust();
-        $("#timer").css("display", "none");
-      }, 300500);
     }
   };
 
@@ -765,7 +762,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#timer").css("display", "none");
     clearInterval(x);
-    document.getElementById("timer").innerHTML = "Time reamining : 5m 00s";
+    document.getElementById("timer").innerHTML = "Time reamining : 2m 00s";
 
     $timeout(function() {
       $scope.history.push({
@@ -910,7 +907,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
         $("#timer").css("display", "none");
         clearInterval(x);
-        document.getElementById("timer").innerHTML = "Time reamining : 5m 00s";
+        document.getElementById("timer").innerHTML = "Time reamining : 2m 00s";
 
         socket.emit('done', {
           'username': $scope.currentUsername,
