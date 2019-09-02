@@ -359,7 +359,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
       $timeout(function() {
         socket.emit('new_message', {
-          'message': "You have a maximum of two minutes to discuss the answers with your group members now. The objective of this exercise is to clarify doubts and arrive at the best possible answer. This chat will be disabled after two minutes. If you complete discussion before then, type 'DONE' to move forward.",
+          'message': "You have a maximum of two minutes to discuss the answers with your group members now. When explaining the rationale behind your answer, use the format 'answer - explanation why you think this is the right answer'." +
+          "The objective of this exercise is to clarify doubts and arrive at the best possible answer. This chat will be disabled after two minutes. If you complete discussion before then, type 'DONE' to move forward.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
