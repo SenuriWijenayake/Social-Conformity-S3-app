@@ -343,7 +343,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.cues == 'avatar'){
       return ("User " + (Math.floor(Math.random() * 5) + 1));
     } else {
-      return (shuffle["JG", "NB", "DH", "BS", $scope.currentUsername[0]);
+      return (shuffle(["JG", "NB", "DH", "BS", $scope.currentUsername])[0]);
     }
   };
 
