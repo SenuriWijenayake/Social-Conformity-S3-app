@@ -364,7 +364,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'username': "QuizBot",
           'avatar': "qb.png"
         });
-      }, 1000);
+      }, 500);
+      $timeout(function() {
+        socket.emit('new_message', {
+          'message': "User " + (Math.floor(Math.random() * 5) + 1) + "you may start the discussion with your opinion.",
+          'username': "QuizBot",
+          'avatar': "qb.png"
+        });
+      }, 500);
       $timeout(function() {
         $scope.scrollAdjust();
         $scope.startTimer();
