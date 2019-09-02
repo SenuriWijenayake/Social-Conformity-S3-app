@@ -549,7 +549,13 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.next = function() {
+
     $scope.myAnswer.selectedNext = $scope.getTimestamp();
+    
+    $("#change-section").css("display", "none");
+    $("#change-section-nd").css("display", "none");
+    $("#updated-change-section").css("display", "none");
+    $("#updated-change-section-nd").css("display", "none");
 
     $http({
       method: 'POST',
@@ -562,11 +568,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#question-area").css("display", "none");
       $("#chart-area").css("display", "none");
       $("#updated_div").css("display", "none");
-
-      $("#change-section").css("display", "none");
-      $("#change-section-nd").css("display", "none");
-      $("#updated-change-section").css("display", "none");
-      $("#updated-change-section-nd").css("display", "none");
 
       $scope.count = 0;
 
