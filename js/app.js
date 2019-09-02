@@ -338,6 +338,14 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     var random = Math.floor(Math.random() * (+max - +min)) + +min;
     return random;
   };
+  
+  $scope.getRandomUser = function(){
+    if ($scope.cues == 'avatar'){
+      return ("User " + (Math.floor(Math.random() * 5) + 1));
+    } else {
+      return (shuffle["JG", "NB", "DH", "BS", $scope.currentUsername][0]);
+    }
+  };
 
   $scope.createFeedback = function(data) {
     $scope.myAnswer.sawFeedback = $scope.getTimestamp();
@@ -380,14 +388,6 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $timeout(function() {
         $("#timer").css("display", "block");
       }, 1600);
-    }
-  };
-
-  $scope.getRandomUser = function(){
-    if ($scope.cues == 'avatar'){
-      return ("User " + (Math.floor(Math.random() * 5) + 1));
-    } else {
-      return (shuffle["JG", "NB", "DH", "BS", $scope.currentUsername][0]);
     }
   };
 
