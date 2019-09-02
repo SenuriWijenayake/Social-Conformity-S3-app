@@ -343,7 +343,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.cues == 'avatar'){
       return ("User " + (Math.floor(Math.random() * 5) + 1));
     } else {
-      return (shuffle(["JG", "NB", "DH", "BS", $scope.currentUsername])[0]);
+      return ("User " + shuffle(["JG", "NB", "DH", "BS", $scope.currentUsername])[0]);
     }
   };
 
@@ -375,7 +375,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, 500);
       $timeout(function() {
         socket.emit('new_message', {
-          'message': $scope.getRandomUser() + "you may start the discussion with your opinion.",
+          'message': $scope.getRandomUser() + " you may start the discussion with your opinion.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
