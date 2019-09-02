@@ -372,22 +372,15 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           'username': "QuizBot",
           'avatar': "qb.png"
         });
-      }, 500);
-      $timeout(function() {
-        socket.emit('new_message', {
-          'message': $scope.getRandomUser() + " you may start the discussion with your opinion.",
-          'username': "QuizBot",
-          'avatar': "qb.png"
-        });
-      }, 500);
+      }, 1000);
       $timeout(function() {
         $scope.scrollAdjust();
-        $scope.startTimer();
-        socket.emit('start_timer', {});
       }, 1500);
       $timeout(function() {
+        $scope.startTimer();
+        socket.emit('start_timer', {});
         $("#timer").css("display", "block");
-      }, 1600);
+      }, 2500);
     }
   };
 
@@ -585,7 +578,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $("#confidence-container").css("display", "none");
 
       //Handling the ending of the quiz and directing to the big five questionnaire
-      if ($scope.currentQIndex == 3) {
+      if ($scope.currentQIndex == 18) {
         //Disable the confirmation message
         $scope.onbeforeunloadEnabled = false;
         //Save chat messages to the database
