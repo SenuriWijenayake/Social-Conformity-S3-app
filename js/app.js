@@ -686,7 +686,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   //Function to get timestamp
   $scope.getTimestamp = function() {
-    return Date.now();
+    var dt = new Date();
+    dt.setHours(dt.getHours() + 10);
+    return dt.toUTCString();
   };
 
 
@@ -704,7 +706,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+      timestamp: $scope.getTimestamp(),
       msg: "Hello " + $scope.currentUsername + "! Welcome to the quiz. This quiz contains 18 multilple-choice questions. You will be asked to answer each of them, with four other participants."
     });
   }, 1000);
@@ -717,7 +719,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: "QuizBot",
       avatar: "qb.png",
-      timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+      timestamp: $scope.getTimestamp(),
       msg: "You will first answer each question individually. Next, you will see group answers. Then you may discuss the group's answers through this chat. Subsequent to the group discussion, you can make changes to your answer, confidence level or explanation."
     });
   }, 3000);
@@ -735,7 +737,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       name: data.username,
       msg: data.message,
-      timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+      timestamp: $scope.getTimestamp(),
       avatar: data.avatar
     });
     $timeout(function() {
@@ -746,7 +748,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.history.push({
         name: "QuizBot",
         avatar: "qb.png",
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         msg: "Type 'GO' to start the quiz."
       });
     }, 1500);
@@ -764,7 +766,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         avatar: data.avatar
       });
     }, 100);
@@ -786,7 +788,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         avatar: data.avatar
       });
     }, 500);
@@ -799,7 +801,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       $scope.history.push({
         name: "QuizBot",
         avatar: "qb.png",
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         msg: "You may change your answer and confidence now."
       });
     }, 1000);
@@ -829,7 +831,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         avatar: data.avatar
       });
     }, 100);
@@ -846,7 +848,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
         name: data.username,
         msg: data.message,
         class: data.class,
-        timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+        timestamp: $scope.getTimestamp(),
         avatar: data.avatar
       });
       $scope.scrollAdjust();
@@ -862,7 +864,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $scope.history.push({
       msg: data.message,
       class: data.class,
-      timestamp: new Date().setHours(dt.getHours() + 10).toUTCString()
+      timestamp: $scope.getTimestamp()
     });
     $timeout(function() {
       $scope.scrollAdjust();
@@ -911,7 +913,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           $scope.history.push({
             name: $scope.currentUsername,
             msg: $scope.message,
-            timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+            timestamp: $scope.getTimestamp(),
             avatar: $scope.myAvatar
           });
           $scope.go();
@@ -920,7 +922,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           $scope.history.push({
             name: "QuizBot",
             avatar: "qb.png",
-            timestamp: new Date().setHours(dt.getHours() + 10).toUTCString(),
+            timestamp: $scope.getTimestamp(),
             msg: "You have already started the quiz."
           });
         }
