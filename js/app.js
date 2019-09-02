@@ -338,7 +338,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     var random = Math.floor(Math.random() * (+max - +min)) + +min;
     return random;
   };
-  
+
   $scope.getRandomUser = function(){
     if ($scope.cues == 'avatar'){
       return ("User " + (Math.floor(Math.random() * 5) + 1));
@@ -375,7 +375,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
       }, 500);
       $timeout(function() {
         socket.emit('new_message', {
-          'message': getRandomUser() + "you may start the discussion with your opinion.",
+          'message': $scope.getRandomUser() + "you may start the discussion with your opinion.",
           'username': "QuizBot",
           'avatar': "qb.png"
         });
