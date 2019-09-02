@@ -161,9 +161,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $("input[type='range']").change(function() {
     if ($scope.IsUpdated) {
-      $scope.myAnswer.selectedUpdatedConf = $scope.getTimestamp();
+      $scope.myAnswer.selectedUpdatedConf = $scope.getTimestampForEvents();
     } else {
-      $scope.myAnswer.selectedConf = $scope.getTimestamp();
+      $scope.myAnswer.selectedConf = $scope.getTimestampForEvents();
     }
 
     $scope.sliderChanged = true;
@@ -205,7 +205,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     if ($scope.discussion == 'No') {
       $("#question-area").css("display", "inline");
       $("#qBox").css("border", "solid red");
-      $scope.myAnswer.sawQuestion = $scope.getTimestamp();
+      $scope.myAnswer.sawQuestion = $scope.getTimestampForEvents();
     }
 
   }, function(error) {
@@ -237,9 +237,9 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //Show only when the answer is selected
   $scope.clicked = function() {
     if ($scope.IsUpdated) {
-      $scope.myAnswer.selectedUpdatedOption = $scope.getTimestamp();
+      $scope.myAnswer.selectedUpdatedOption = $scope.getTimestampForEvents();
     } else {
-      $scope.myAnswer.selectedOption = $scope.getTimestamp();
+      $scope.myAnswer.selectedOption = $scope.getTimestampForEvents();
     }
 
     //Resetting the red line
@@ -256,7 +256,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.submitAnswer = function() {
     if ($scope.sliderChanged) {
-      $scope.myAnswer.clickedSubmit = $scope.getTimestamp();
+      $scope.myAnswer.clickedSubmit = $scope.getTimestampForEvents();
       //Remove the button
       $("#submit-button").css("display", "none");
       //Disbling the input
@@ -348,7 +348,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   };
 
   $scope.createFeedback = function(data) {
-    $scope.myAnswer.sawFeedback = $scope.getTimestamp();
+    $scope.myAnswer.sawFeedback = $scope.getTimestampForEvents();
     $scope.feedback = data;
     $("#loader").css("display", "none");
     $("#loader-text").css("display", "none");
@@ -393,7 +393,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     });
 
     $scope.IsUpdated = true;
-    $scope.myAnswer.selectedYes = $scope.getTimestamp();
+    $scope.myAnswer.selectedYes = $scope.getTimestampForEvents();
     if ($scope.visibility == 'No') {
       $scope.count = 1;
     } else {
@@ -423,7 +423,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.updateAndShowAnswers = function() {
     if ($scope.sliderChanged) {
-      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestamp();
+      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestampForEvents();
       //Keep the text disabled
       $("#submit-button").css("display", "none");
       $("#chart-area").css("display", "none");
@@ -463,7 +463,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.showPublicFeedback = function() {
 
-    $scope.myAnswer.selectedNo = $scope.getTimestamp();
+    $scope.myAnswer.selectedNo = $scope.getTimestampForEvents();
     //Show feedback without updating the answer as there is no change
     $("#change-section-nd").css("display", "none");
     $("#change-section").css("display", "none");
@@ -507,7 +507,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     $("#progress-bar-updated").css("display", "none");
     $("#updated_div").css("display", "block");
     //Show feedback
-    $scope.myAnswer.sawUpdatedFeedback = $scope.getTimestamp();
+    $scope.myAnswer.sawUpdatedFeedback = $scope.getTimestampForEvents();
     $scope.updatedFeedback = response.data;
     if ($scope.discussion == 'Yes') {
       $("#updated-change-section").css("display", "block");
@@ -519,7 +519,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
   //For private condition
   $scope.update = function() {
     if ($scope.sliderChanged) {
-      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestamp();
+      $scope.myAnswer.submittedUpdatedAnswer = $scope.getTimestampForEvents();
       //Remove the question area and chart area
       $("#question-area").css("display", "none");
       $("#chart-area").css("display", "none");
@@ -550,8 +550,8 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
   $scope.next = function() {
 
-    $scope.myAnswer.selectedNext = $scope.getTimestamp();
-    
+    $scope.myAnswer.selectedNext = $scope.getTimestampForEvents();
+
     $("#change-section").css("display", "none");
     $("#change-section-nd").css("display", "none");
     $("#updated-change-section").css("display", "none");
@@ -642,7 +642,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
           $scope.explained = false;
           $scope.myAnswer.confidence = 50;
           $scope.question = response.data;
-          $scope.myAnswer.sawQuestion = $scope.getTimestamp();
+          $scope.myAnswer.sawQuestion = $scope.getTimestampForEvents();
 
           if ($scope.question.img) {
             $("#image-container").css("display", "inline");
@@ -678,11 +678,17 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
     element.scrollTop = element.scrollHeight;
   };
 
-  //Function to get timestamp
+  //Function to get timestamp for the chat
   $scope.getTimestamp = function() {
     var dt = new Date();
     dt.setHours(dt.getHours() + 10);
     return dt.toUTCString();
+  };
+
+  //Function to get timestamp for events
+  $scope.getTimestampForEvents = function() {
+    var dt = new Date();
+    return dt;
   };
 
 
@@ -874,7 +880,7 @@ app.controller('QuizController', function($scope, $http, $window, $timeout) {
 
     $("#question-area").css("display", "inline");
     $("#qBox").css("border", "solid red");
-    $scope.myAnswer.sawQuestion = $scope.getTimestamp();
+    $scope.myAnswer.sawQuestion = $scope.getTimestampForEvents();
 
     //Disable chat box
     $("#chat-text").attr("disabled", true);
